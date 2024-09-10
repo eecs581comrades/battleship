@@ -3,8 +3,8 @@ const ships = [
     { name: 'Carrier', length: 5, placed: false },
     { name: 'Battleship', length: 4, placed: false },
     { name: 'Cruiser', length: 3, placed: false },
-    { name: 'Submarine', length: 3, placed: false },
-    { name: 'Destroyer', length: 2, placed: false }
+    { name: 'Submarine', length: 2, placed: false },
+    { name: 'Destroyer', length: 1, placed: false }
 ];
 
 let selectedShip = ships[0];
