@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battleship Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Battleship Game</h1>
+
+    <h2>Select a ship to place</h2>
+    <select id="shipSelect">
+        <option value="Carrier">Carrier (5)</option>
+        <option value="Battleship">Battleship (4)</option>
+        <option value="Cruiser">Cruiser (3)</option>
+        <option value="Submarine">Submarine (3)</option>
+        <option value="Destroyer">Destroyer (2)</option>
+    </select>
+
+    <button id="toggleOrientation">Horizontal</button>
+    <button id="removeShip">Remove Selected Ship</button>
+    <button id="startGame" disabled>Start Game</button>
+
+    <div id="playerGridContainer">
+        <h3>Your Ship Grid</h3>
+        <div id="grid"></div>
+    </div>
+
+    <div id="gameBoardContainer" style="display: none;">
+        <h3>Your Grid (left) | Opponent's Grid (right)</h3>
+        <div id="playerBoard"></div>
+        <div id="opponentBoard"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
