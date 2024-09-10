@@ -1,0 +1,55 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#grid, #playerBoard, #opponentBoard {
+    display: grid;
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
+    gap: 2px;
+    margin: 20px auto;
+}
+
+.grid-item {
+    background-color: lightblue;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.grid-item:hover {
+    background-color: skyblue;
+}
+
+button, select {
+    margin: 10px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+#startGame {
+    background-color: green;
+    color: white;
+    cursor: pointer;
+}
+
+#startGame:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
+
+#playerGridContainer {
+    display: inline-block;
+    margin-right: 50px;
+}
+
+#gameBoardContainer {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
