@@ -1,13 +1,26 @@
+<!-- homeScreen.html
+Description: The starting screen and setting selection for joining or creating a game of battleship
+Inputs: Game code or how many ships
+Outputs: Links to main.html to play game
+Sources: stackoverflow.com, w3schools.com, programminghead.com
+Authors: Katie Golder
+Creation date: 9-10-24
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<h1>Let's Play Battleship</h1>
-<link rel="stylesheet" href="styleHomeScreen.css">
+  <title>Begin Battleship Game</title>
+  <h1>Let's Play Battleship</h1>
+  <link rel="stylesheet" href="styleHomeScreen.css"> <!--Adds style-->
 </head>
 
 <body>
+    <!--Create buttons for player to start or join a game which activates that function-->
     <button onclick="newGame()">New Game</body>
     <button onclick="joinGame()">Join Game</button>
+    
+    <!--Functions defining to show or hide the corresponding form per game mode selection -->
     <script>
         function newGame() {
           document.getElementById("newGame").style.display = "block";
@@ -18,7 +31,9 @@
           document.getElementById("newGame").style.display = "none";
         }
     </script>
-    <form id="newGame" style="display:none">
+
+    <!--Forms to get the player's input of number of ships to play with if hosting a new game or join code if joining a game-->
+    <form id="newGame" style="display:none" method="POST" action="../Grid Test/main.html"><!--Player is creating game and will redirect to game once number of ships is selected using radio buttons-->
         <p>Number of Ships</p>
         <input type="radio" id="1" name="ship_select" value="1" required>
         <label for="1">1</label><br>
@@ -33,7 +48,7 @@
         <p>Your code is: ######<p>
         <input type="submit" value="Play">
     </form>
-    <form id="joinGame" style = "display:none">
+    <form id="joinGame" style = "display:none" method="POST" action="../Grid Test/main.html"> <!--Player is joining Game and will redirect to game once code is entered-->
         <p>Join Code<p>
         <input type="text" id ="enterCode" name = "enterCode" required>
         <input type="submit" value="Play">
