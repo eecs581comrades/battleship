@@ -145,6 +145,7 @@ removeShipButton.addEventListener('click', function() {
 
 // Switch to attack mode
 startGameButton.addEventListener('click', function() {
+    if (isAttackMode) return;
     isAttackMode = true;
     gameBoardContainer.style.display = 'flex';
     grid.style.display = 'none';
