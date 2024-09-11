@@ -6,7 +6,38 @@
 </head>
 
 <body>
-<p>Enter your code to connect</p>
-<p>Start New Game</p>
+    <button onclick="newGame()">New Game</body>
+    <button onclick="joinGame()">Join Game</button>
+    <script>
+        function newGame() {
+          document.getElementById("newGame").style.display = "block";
+          document.getElementById("joinGame").style.display = "none";
+        }
+        function joinGame() {
+          document.getElementById("joinGame").style.display = "block";
+          document.getElementById("newGame").style.display = "none";
+        }
+    </script>
+    <form id="newGame" style="display:none">
+        <p>Number of Ships</p>
+        <input type="radio" id="1" name="ship_select" value="1" required>
+        <label for="1">1</label><br>
+        <input type="radio" id="2" name="ship_select" value="2" required>
+        <label for="2">2</label><br>
+        <input type="radio" id="3" name="ship_select" value="3" required>
+        <label for="3">3</label><br>
+        <input type="radio" id="4" name="ship_select" value="4" required>
+        <label for="4">4</label><br>
+        <input type="radio" id="5" name="ship_select" value="5" required>
+        <label for="5">5</label><br>
+        <p>Your code is: ######<p>
+        <input type="submit" value="Play">
+    </form>
+    <form id="joinGame" style = "display:none">
+        <p>Join Code<p>
+        <input type="text" id ="enterCode" name = "enterCode" required>
+        <input type="submit" value="Play">
+    </form>
+    
 </body>
 
