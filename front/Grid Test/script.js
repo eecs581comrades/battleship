@@ -25,151 +25,125 @@ const playerBoard = document.getElementById('playerBoard');
 const opponentBoard = document.getElementById('opponentBoard');
 const gameBoardContainer = document.getElementById('gameBoardContainer');
 
-// Create 10x10 grid for placing ships
+// Create a 10x10 grid with labels for columns (A-J) and rows (1-10)
 function createGrid(container, gridType) {
+    container.innerHTML = ''; // Clear any existing content
+
+    // Create a wrapper for the grid
+    const gridWrapper = document.createElement('div');
+    gridWrapper.classList.add('grid-wrapper');
+
+    // Create column labels
+    const headerRow = document.createElement('div');
+    headerRow.classList.add('header-row');
+
+    // Dummy cell for top-left corner
+    const dummyCell = document.createElement('div');
+    dummyCell.classList.add('dummy-cell');
+    headerRow.appendChild(dummyCell);
+
+    for (let col = 0; col < 10; col++) {
+        const label = document.createElement('div');
+        label.classList.add('header-item');
+        label.textContent = String.fromCharCode(65 + col); // A-J
+        headerRow.appendChild(label);
+    }
+    gridWrapper.appendChild(headerRow);
+
+    // Create grid rows with row labels
     for (let row = 0; row < 10; row++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.classList.add('row');
+
+        // Row label
+        const rowLabel = document.createElement('div');
+        rowLabel.classList.add('row-label');
+        rowLabel.textContent = row + 1; // 1-10
+        rowDiv.appendChild(rowLabel);
+
+        // Create cells
         for (let col = 0; col < 10; col++) {
             const cell = document.createElement('div');
             cell.classList.add('grid-item');
             cell.dataset.row = row + 1;
             cell.dataset.col = col + 1;
-            container.appendChild(cell);
+            rowDiv.appendChild(cell);
 
             // Attach click event listener
             cell.addEventListener('click', function() {
-                const row = parseInt(this.dataset.row) - 1;
-                const col = parseInt(this.dataset.col) - 1;
+                const clickedRow = parseInt(this.dataset.row) - 1;
+                const clickedCol = parseInt(this.dataset.col) - 1;
 
-                if (!isAttackMode && gridType === 'player') {
-                    placeShip(row, col);
-                } else if (isAttackMode && gridType === 'opponent') {
-                    handlePlayerShot(row, col);
+                if (gridType === 'player' && !isAttackMode) {
+                    placeShip(clickedRow, clickedCol);
+                } else if (gridType === 'opponent' && isAttackMode) {
+                    handlePlayerShot(clickedRow, clickedCol);
                 }
             });
         }
+        gridWrapper.appendChild(rowDiv);
     }
+
+    // Append the entire grid with headers to the container
+    container.appendChild(gridWrapper);
 }
 
-createGrid(grid, 'player');
-
-// Function to place a ship
-function placeShip(row, col) {
-    if (selectedShip.placed) {
-        console.log(`${selectedShip.name} has already been placed.`);
-        return;
-    }
-
-    if (canPlaceShip(row, col, selectedShip.length, isHorizontal)) {
-        for (let i = 0; i < selectedShip.length; i++) {
-            if (isHorizontal) {
-                playerShipGrid[row][col + i] = selectedShip.name;
-                markCellAsShip(row, col + i);
-            } else {
-                playerShipGrid[row + i][col] = selectedShip.name;
-                markCellAsShip(row + i, col);
-            }
-        }
-        selectedShip.placed = true;
-        placedShips++;
-        checkAllShipsPlaced();
-    } else {
-        console.log('Cannot place ship here.');
-    }
-}
-
-// Function to mark cells as part of a ship
-function markCellAsShip(row, col) {
-    const cell = document.querySelector(`[data-row="${row + 1}"][data-col="${col + 1}"]`);
-    if (cell) {
-        cell.style.backgroundColor = 'gray'; // Visual indicator for ships
-    }
-}
-
-// Helper function to check if the ship can be placed
-function canPlaceShip(row, col, length, isHorizontal) {
+// Function to check if a ship can be placed at the given position
+function canPlaceShip(row, col, shipLength, isHorizontal) {
     if (isHorizontal) {
-        if (col + length > 10) return false; // Out of bounds horizontally
-        for (let i = 0; i < length; i++) {
-            if (playerShipGrid[row][col + i] !== null) return false; // Collision
+        if (col + shipLength > 10) return false; // Check boundary horizontally
+        for (let i = 0; i < shipLength; i++) {
+            if (playerShipGrid[row][col + i] !== null) return false; // Check for overlap
         }
     } else {
-        if (row + length > 10) return false; // Out of bounds vertically
-        for (let i = 0; i < length; i++) {
-            if (playerShipGrid[row + i][col] !== null) return false; // Collision
+        if (row + shipLength > 10) return false; // Check boundary vertically
+        for (let i = 0; i < shipLength; i++) {
+            if (playerShipGrid[row + i][col] !== null) return false; // Check for overlap
         }
     }
     return true;
 }
 
-// Check if all ships are placed
-function checkAllShipsPlaced() {
-    if (placedShips === ships.length) {
-        startGameButton.disabled = false;
-    }
-}
+// Function to place a ship on the grid
+function placeShip(row, col) {
+    const ship = selectedShip;
 
-// Handle ship selection change
-shipSelect.addEventListener('change', function() {
-    const shipName = this.value;
-    selectedShip = ships.find(ship => ship.name === shipName);
-});
-
-// Toggle ship orientation
-toggleOrientationButton.addEventListener('click', function() {
-    isHorizontal = !isHorizontal;
-    toggleOrientationButton.textContent = isHorizontal ? 'Horizontal' : 'Vertical';
-});
-
-// Remove selected ship
-removeShipButton.addEventListener('click', function() {
-    if (!selectedShip.placed) {
-        console.log(`${selectedShip.name} is not placed yet.`);
+    if (ship.placed) {
+        alert(`${ship.name} is already placed.`);
         return;
     }
 
-    for (let row = 0; row < 10; row++) {
-        for (let col = 0; col < 10; col++) {
-            if (playerShipGrid[row][col] === selectedShip.name) {
-                playerShipGrid[row][col] = null;
-                const cell = document.querySelector(`[data-row="${row + 1}"][data-col="${col + 1}"]`);
-                if (cell) {
-                    cell.style.backgroundColor = 'lightblue';
-                }
+    if (canPlaceShip(row, col, ship.length, isHorizontal)) {
+        // Place the ship
+        if (isHorizontal) {
+            for (let i = 0; i < ship.length; i++) {
+                playerShipGrid[row][col + i] = ship.name;
+                document.querySelector(`[data-row="${row + 1}"][data-col="${col + i + 1}"]`).classList.add('ship-placed');
+            }
+        } else {
+            for (let i = 0; i < ship.length; i++) {
+                playerShipGrid[row + i][col] = ship.name;
+                document.querySelector(`[data-row="${row + i + 1}"][data-col="${col + 1}"]`).classList.add('ship-placed');
             }
         }
-    }
-    selectedShip.placed = false;
-    placedShips--;
-    startGameButton.disabled = true;
-});
 
-// Switch to attack mode
-startGameButton.addEventListener('click', function() {
-    isAttackMode = true;
-    gameBoardContainer.style.display = 'flex';
-    grid.style.display = 'none';
-    createGrid(playerBoard, 'player'); // Display player's placed grid
-    createGrid(opponentBoard, 'opponent'); // Create grid for guessing opponent's ships
-    displayPlayerShips(); // Show player's ships on their reference grid
-    console.log('Game started! Now in attack mode.');
-});
+        ship.placed = true;
+        placedShips++;
 
-// Display player's placed ships on the reference grid
-function displayPlayerShips() {
-    for (let row = 0; row < 10; row++) {
-        for (let col = 0; col < 10; col++) {
-            if (playerShipGrid[row][col] !== null) {
-                const cell = document.querySelector(`#playerBoard [data-row="${row + 1}"][data-col="${col + 1}"]`);
-                if (cell) {
-                    cell.style.backgroundColor = 'gray'; // Color player's ships on the reference grid
-                }
-            }
+        if (placedShips === ships.length) {
+            alert('All ships have been placed. Ready to start the game!');
         }
+    } else {
+        alert('Ship cannot be placed here.');
     }
 }
 
-// Handle player's shot during attack mode
-function handlePlayerShot(row, col) {
-    console.log(`Player shot at: Row ${row + 1}, Col ${col + 1}`);
-    // You can add more logic here later (e.g., handle hit or miss on opponent grid)
-}
+// Initial grid creation for the player
+createGrid(grid, 'player');
+
+// Example to toggle ship orientation
+toggleOrientationButton.addEventListener('click', () => {
+    isHorizontal = !isHorizontal;
+    toggleOrientationButton.textContent = isHorizontal ? 'Switch to Vertical' : 'Switch to Horizontal';
+});
+
