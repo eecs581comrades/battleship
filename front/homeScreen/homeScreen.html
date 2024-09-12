@@ -17,8 +17,10 @@ Creation date: 9-10-24
 
 <body>
     <!--Create buttons for player to start or join a game which activates that function-->
+    <div id ="buttons" style="width: 300px; margin: auto">
     <button onclick="newGame()">New Game</body>
     <button onclick="joinGame()">Join Game</button>
+    </div>
     
     <!--Functions defining to show or hide the corresponding form per game mode selection -->
     <script>
@@ -35,6 +37,7 @@ Creation date: 9-10-24
     <!--Forms to get the player's input of number of ships to play with if hosting a new game or join code if joining a game-->
     <form id="newGame" style="display:none" method="POST" action="../Grid Test/main.html"><!--Player is creating game and will redirect to game once number of ships is selected using radio buttons-->
         <p>Number of Ships</p>
+        <div class="ship_select" style="width: 300px; margin: 0 auto;">
         <input type="radio" id="1" name="ship_select" value="1" required>
         <label for="1">1</label><br>
         <input type="radio" id="2" name="ship_select" value="2" required>
@@ -45,13 +48,14 @@ Creation date: 9-10-24
         <label for="4">4</label><br>
         <input type="radio" id="5" name="ship_select" value="5" required>
         <label for="5">5</label><br>
+        </div>
         <p>Your code is: ######<p>
         <input type="submit" value="Play">
     </form>
     <form id="joinGame" style = "display:none" method="POST" action="../Grid Test/main.html"> <!--Player is joining Game and will redirect to game once code is entered-->
         <p>Join Code<p>
         <input type="text" id ="enterCode" name = "enterCode" required>
-        <input type="submit" value="Play">
+        <input type="submit" value="Play" style="width: 300px; margin: 0 auto;">
     </form>
     
 </body>
