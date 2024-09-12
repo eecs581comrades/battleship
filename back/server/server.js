@@ -2,9 +2,16 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
+const round = require('modules/battleshipRound');
 
 const app = express();
 const server = http.createServer(app);
+
+let playerPartyAssociations = {};
+let playerRoundAssociations = {};
+
+let activeParties = {};
+let activeRounds = {};
 
 const io = socketIo(server, {
     cors: {
@@ -36,13 +43,48 @@ app.get('/', (req, res) => {
 // For in-game communication
 io.on('connection', (socket) => {
     console.log("Client Connected:", socket.id);
-
-    socket.emit('update', { text: 'Welcome to the real-time server!' });
-
     socket.on('clientMessage', (message) => {
         console.log('Message from client:', message);
         
         socket.emit('update', { status: 'Message received!' });
+    });
+
+
+    socket.on('tryCreateParty', () => {
+        if (playerPartyAssociations[socket.id] !== undefined){
+            socket.emit('createParty', { status: 'Rejected', reason: 'Target player is already registered in a party' });
+            return;
+        }
+
+        // Party Creation Logic
+
+    });
+
+    socket.on('tryJoinParty', (partyId) => {
+        if (activeParties[partyId] === undefined){
+            socket.emit('joinParty', { status: 'Rejected', reason: 'Requrested party could not be found' });
+            return;
+        }
+
+        // Party Join Logic
+    });
+
+    socket.on('tryStartRound', () => {
+        const party = playerPartyAssociations[socket.id];
+        if (party === undefined || party.id == undefined || party.host !== socket.id){
+            socket.emit('startRound', { status: 'Rejected', reason: 'The requesting player is not a member of an active party'});
+            return
+        }
+
+        // Destroy Party
+
+        const newRound = new BattleshipRound(socket.id, party.numberOfShips, party.gridDimensions);
+
+        playerRoundAssociations[socket.id] = newRound;
+    });
+
+    socket.on('tryHit', (attemptData) => {
+
     });
 
     socket.on('disconnect', () => {
