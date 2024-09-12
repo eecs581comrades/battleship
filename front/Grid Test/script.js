@@ -12,6 +12,15 @@ let isHorizontal = true;
 let placedShips = 0;
 let isAttackMode = false;
 
+// Store player ships' coordinates in this object
+const playerShips = {
+    Carrier: [],
+    Battleship: [],
+    Cruiser: [],
+    Submarine: [],
+    Destroyer: []
+};
+
 // Grids for player ship placement and opponent guessing
 const playerShipGrid = Array(10).fill(null).map(() => Array(10).fill(null));
 
@@ -60,17 +69,22 @@ function placeShip(row, col) {
     }
 
     if (canPlaceShip(row, col, selectedShip.length, isHorizontal)) {
+        let coordinates = []; // To store the coordinates of the placed ship
+
         for (let i = 0; i < selectedShip.length; i++) {
             if (isHorizontal) {
                 playerShipGrid[row][col + i] = selectedShip.name;
                 markCellAsShip(row, col + i);
+                coordinates.push({ x: row + 1, y: col + 1 + i }); // Store coordinates
             } else {
                 playerShipGrid[row + i][col] = selectedShip.name;
                 markCellAsShip(row + i, col);
+                coordinates.push({ x: row + 1 + i, y: col + 1 }); // Store coordinates
             }
         }
         selectedShip.placed = true;
         placedShips++;
+        playerShips[selectedShip.name] = coordinates; // Store ship coordinates in the playerShips object
         checkAllShipsPlaced();
     } else {
         console.log('Cannot place ship here.');
@@ -127,6 +141,7 @@ removeShipButton.addEventListener('click', function() {
         return;
     }
 
+    // Clear the ship's coordinates from the grid
     for (let row = 0; row < 10; row++) {
         for (let col = 0; col < 10; col++) {
             if (playerShipGrid[row][col] === selectedShip.name) {
@@ -138,21 +153,29 @@ removeShipButton.addEventListener('click', function() {
             }
         }
     }
+    
+    // Reset ship placement
     selectedShip.placed = false;
     placedShips--;
-    startGameButton.disabled = true;
+    playerShips[selectedShip.name] = []; // Clear ship's coordinates
+    startGameButton.disabled = true; // Disable start game button if all ships are not placed
 });
 
 // Switch to attack mode
 startGameButton.addEventListener('click', function() {
-    if (isAttackMode) return;
+    if (isAttackMode) return; // Prevent further clicks if game already started
+    
     isAttackMode = true;
     gameBoardContainer.style.display = 'flex';
     grid.style.display = 'none';
+    
     createGrid(playerBoard, 'player'); // Display player's placed grid
     createGrid(opponentBoard, 'opponent'); // Create grid for guessing opponent's ships
+    
     displayPlayerShips(); // Show player's ships on their reference grid
     console.log('Game started! Now in attack mode.');
+    
+    startGameButton.disabled = true; // Disable the "Start Game" button after it's clicked once
 });
 
 // Display player's placed ships on the reference grid
