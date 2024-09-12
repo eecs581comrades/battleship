@@ -1,9 +1,30 @@
+/* styleHomeScreen.css
+Description: Makes the starting screen look nice
+Inputs: 
+Outputs: 
+Sources: w3schools.com
+Authors: Katie Golder
+Creation date: 9-11-24
+-->*/
 body{
-background-color: lightblue;
+  background-color: lightblue;
 }
 h1{
     font-family: "Copperplate", fantasy, serif;
+    text-align: center;
   }
 p{
     font-family: "Couier New", Monospace;
+    text-align: center;
+}
+button { /*template from w3schools.com edited for our style*/
+  background-color: #005637;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  margin: 1px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
 }
