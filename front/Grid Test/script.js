@@ -1,4 +1,5 @@
 // Ship details
+
 const ships = [
     { name: 'Carrier', length: 5, placed: false },
     { name: 'Battleship', length: 4, placed: false },

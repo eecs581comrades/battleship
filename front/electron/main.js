@@ -1,5 +1,6 @@
-const { app, BrowserWindow, ipcMain } = require('electron/main')
-const path = require('node:path')
+const { app, BrowserWindow, ipcMain } = require('electron/main');
+const path = require('node:path');
+const 
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -10,7 +11,7 @@ const createWindow = () => {
     }
   })
 
-  win.loadFile('front/homeScreen/homeScreen.html')
+  win.loadFile('../Grid Test/main.html')
 }
 
 app.whenReady().then(() => {
