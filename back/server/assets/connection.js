@@ -1,5 +1,5 @@
 //__DEVELOPMENT_COPY_ONLY__//
-// The real copy of this script should be in front-end. This version should be a mirror.
+// The real copy of this script should be in front-end. This version should be a mirror and is only used by test.js for testing comms.
 
 fetch('./config.json')
     .then(response => response.json())
