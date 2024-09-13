@@ -35,4 +35,8 @@ class Match{
     }
 }
 
+<<<<<<< HEAD
+module.exports = Match;
+=======
 module.exports = [ Match, generateUniqueId ];
+>>>>>>> 9ce4380f3979d0f10c2bd4f913f859924b507e86

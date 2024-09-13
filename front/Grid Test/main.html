@@ -10,6 +10,8 @@
 <body>
     <h1>Battleship Game</h1>
 
+    <div id="setupControls">
+
     <h2>Select a ship to place</h2>
     <select id="shipSelect">
         <option value="Carrier">Carrier (5)</option>
@@ -19,9 +21,12 @@
         <option value="Destroyer">Destroyer (1)</option>
     </select>
 
-    <button id="toggleOrientation">Horizontal</button>
-    <button id="removeShip">Remove Selected Ship</button>
-    <button id="startGame" disabled>Start Game</button>
+    
+        <button id="toggleOrientation">Horizontal</button>
+        <button id="removeShip">Remove Selected Ship</button>
+        <button id="startGame" disabled>Start Game</button>
+    </div>
+    <br/>
 
     <br/>
 
@@ -29,7 +34,11 @@
         <div id="grid"></div>
     </div>
 
+<<<<<<< HEAD
+    <h3 id="gridHeader" style="display: none">Your Grid (left) | Opponent's Grid (right)</h3>
+=======
     <h3>Your Grid (left) | Opponent's Grid (right)</h3>
+>>>>>>> 9ce4380f3979d0f10c2bd4f913f859924b507e86
         <br/>
 
     <div id="gameBoardContainer" style="display: none;">
