@@ -9,8 +9,8 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
-const round = require('modules/battleshipRound');
-const matchmaking = require('modules/matchmaking')
+const round = require('./modules/battleshipRound');
+const matchmaking = require('./modules/matchmaking')
 
 const app = express();
 const server = http.createServer(app);
