@@ -34,3 +34,5 @@ class Match{
         this.players.push(Opponent);
     }
 }
+
+module.exports = Match;

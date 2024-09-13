@@ -1,28 +1,9 @@
-/* styles.css */
+/* General styles */
 body {
     font-family: "Couier New", Monospace;
     text-align: center;
-}
-
-#grid, #playerBoard, #opponentBoard {
-    display: grid;
-    grid-template-columns: repeat(10, 50px);
-    grid-template-rows: repeat(10, 50px);
-    gap: 2px;
-    margin: 20px auto;
-}
-
-.grid-item {
-    background-color: lightblue;
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.grid-item:hover {
-    background-color: skyblue;
+    margin: 0;
+    padding: 0;
 }
 
 button, select {
@@ -42,9 +23,75 @@ button, select {
     cursor: not-allowed;
 }
 
+/* Controls section styles */
+#controls {
+    margin: 20px auto;
+}
+
+/* Grid container styles */
+.grid-wrapper {
+    display: inline-block;
+    border-collapse: collapse;
+    position: relative;
+}
+
+/* Header row styles (column labels) */
+.header-row {
+    display: flex;
+}
+
+.dummy-cell {
+    width: 50px; /* Width of the dummy cell */
+    height: 50px; /* Height to match grid item */
+    border: 1px solid black;
+    background-color: #f0f0f0; /* Light background */
+}
+
+.header-item {
+    width: 50px; /* Width of each column label cell */
+    height: 50px; /* Height to match grid item */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    background-color: #f0f0f0; /* Light background for column labels */
+    font-weight: bold;
+}
+
+/* Row styles (including row labels) */
+.row {
+    display: flex;
+}
+
+.row-label {
+    width: 50px; /* Width of each row label cell */
+    height: 50px; /* Height to match grid item */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    background-color: #f0f0f0; /* Light background for row labels */
+    font-weight: bold;
+}
+
+.grid-item {
+    width: 50px; /* Width of grid cells */
+    height: 50px; /* Height of grid cells */
+    background-color: lightblue;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.grid-item:hover {
+    background-color: skyblue;
+}
+
 #playerGridContainer {
     display: inline-block;
-    margin-right: 50px;
+    margin: 20px auto; /* Center grid container */
 }
 
 #gameBoardContainer {
@@ -53,3 +100,6 @@ button, select {
     gap: 50px;
 }
 
+.ship-placed {
+    background-color: rgb(85, 85, 87);
+}

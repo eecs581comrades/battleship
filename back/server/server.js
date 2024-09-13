@@ -2,19 +2,24 @@
 //I've added in a numShips parameter to tryCreateParty, since we're going to need that for future communications
 //
 
+// ALL REQUESTS FROM CLIENTS SHOULD INCLUDE DATA FORMATTED AS A TABLE: { prop: value }
+// ALL REQUESTS FROM CLIENTS MUST INCLUDE A CLIENT ID { ..., ClientId: 123456... ... }
 
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
-const round = require('modules/battleshipRound');
-const matchmaking = require('modules/matchmaking')
+const round = require('./modules/battleshipRound');
+const matchmaking = require('./modules/matchmaking')
 
 const app = express();
 const server = http.createServer(app);
 
 let playerPartyAssociations = {};
 let playerRoundAssociations = {};
+
+let playerSockets = {};
+let socketClientAssociations = {};
 
 let activeParties = {};
 let activeRounds = {};
@@ -36,6 +41,7 @@ app.post('/data', (req, res) => {
     const data = req.body;
 
     // Do Things
+    // This is for debug access only.
 
     res.send({ status: 'success' });
 
@@ -49,12 +55,13 @@ app.get('/', (req, res) => {
 // For in-game communication
 io.on('connection', (socket) => {
     console.log("Client Connected:", socket.id);
-    socket.on('clientMessage', (message) => {
-        console.log('Message from client:', message);
-        
-        socket.emit('update', { status: 'Message received!' });
-    });
 
+    socket.emit('getClientId', {});
+
+    socket.on('registerClientId', (data) => {
+        playerSockets[data.ClientId] = socket;
+        socketClientAssociations[socket.id] = data.ClientId;
+    });
 
     socket.on('tryCreateParty', (numShips) => {
         if (playerPartyAssociations[socket.id] !== undefined){
@@ -69,11 +76,11 @@ io.on('connection', (socket) => {
             activeParties[matchId] = socket.id;
             const newMatch = new Match(socket.id, numShips, matchId)
             playerPartyAssociations[socket.id] = newMatch;
-            socket.emit('createParty', {status: 'Create Success', reason: matchId});
+            socket.emit('createParty', {status: 'Success', matchId: matchId});
             return;
         }
         catch(err){
-            socket.emit('createParty', {  status: 'Error', reason: err});
+            socket.emit('createParty', {  status: 'Rejected', reason: err});
             return;
         }
 
@@ -111,6 +118,9 @@ io.on('connection', (socket) => {
             activeRounds[matchId] = party.players;
             const newRound = new BattleshipRound(socket.id, party.numShips, party.gridDimensions);
             playerRoundAssociations[socket.id] = newRound;
+            party.players.forEach(player => {
+                //playerSockets[player.ClientId].emit('startRound', { status: 'Round Started', players: party.players });
+            });
         }
         catch (err){
             socket.emit('startRound', {status: 'Error', reason: err});
@@ -123,6 +133,10 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
+        if (socketClientAssociations[socket.id]){
+            playerSockets[socketClientAssociations[socket.id]] = undefined;
+            socketClientAssociations[socket.id] = undefined;
+        }
         console.log("Client Disconnected:", socket.id);
     });
 });
