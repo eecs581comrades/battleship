@@ -11,20 +11,15 @@
     <button id="sendMessageButton">Send Message</button>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Polling to wait until window.socket is available
             function waitForSocket(callback) {
                 if (window.socket) {
                     callback();
                 } else {
-                    // Retry every 100ms until window.socket is defined
                     setTimeout(() => waitForSocket(callback), 100);
                 }
             }
     
             waitForSocket(() => {
-                // Now that window.socket is available, set up event listeners
-                console.log("Socket is now available.");
-    
                 window.socket.on('update', (data) => {
                     const updatesDiv = document.getElementById('updates');
                     const newUpdate = document.createElement('p');
