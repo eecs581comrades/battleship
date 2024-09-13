@@ -2,6 +2,8 @@
 //I've added in a numShips parameter to tryCreateParty, since we're going to need that for future communications
 //
 
+// ALL REQUESTS FROM CLIENTS SHOULD INCLUDE DATA FORMATTED AS A TABLE: { prop: value }
+// ALL REQUESTS FROM CLIENTS MUST INCLUDE A CLIENT ID { ..., ClientId: 123456... ... }
 
 const express = require('express');
 const http = require('http');
