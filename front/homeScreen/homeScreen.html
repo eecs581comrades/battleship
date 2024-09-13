@@ -28,15 +28,31 @@ Creation date: 9-10-24
         function newGame() {
           document.getElementById("newGame").style.display = "block";
           document.getElementById("joinGame").style.display = "none";
+          document.getElementById('buttonExample').addEventListener('click', () => { //Send request
+            const data = { text: 'Ping Pong!' };
+            socket.emit('tryCreateParty', "#newGame");
+          const socket = io('https://battleship-q6f4.onrender.com/');
+            socket.on('nameOfCallType', (data_or_name_of_data) => {
+            fetch("../Grid Test/main.html");
+          });
+      });
         }
         function joinGame() {
           document.getElementById("joinGame").style.display = "block";
           document.getElementById("newGame").style.display = "none";
-        }
+          document.getElementById('buttonExample').addEventListener('click', () => { //Send request
+            const data = { text: 'Ping Pong!' };
+            socket.emit('tryCreateParty', "#joinGame");
+          const socket = io('https://battleship-q6f4.onrender.com/');
+            socket.on('nameOfCallType', (data_or_name_of_data) => {
+            fetch("../Grid Test/main.html");
+          });
+        });
+      }
     </script>
 
     <!--Forms to get the player's input of number of ships to play with if hosting a new game or join code if joining a game-->
-    <form id="newGame" style="display:none" method="POST" action="../Grid Test/main.html"><!--Player is creating game and will redirect to game once number of ships is selected using radio buttons-->
+    <form id="newGame" style="display:none" ><!--Player is creating game and will redirect to game once number of ships is selected using radio buttons-->
         <p>Number of Ships</p>
         <div class="ship_select" style="width: 300px; margin: 0 auto;">
         <input type="radio" id="1" name="ship_select" value="1" required>
@@ -53,11 +69,11 @@ Creation date: 9-10-24
         <p>Your code is: ######<p>
         <input type="submit" value="Play">
     </form>
-    <form id="joinGame" style = "display:none" method="POST" action="../Grid Test/main.html"> <!--Player is joining Game and will redirect to game once code is entered-->
+    <form id="joinGame" style = "display:none"> <!--Player is joining Game and will redirect to game once code is entered-->
         <p>Join Code<p>
         <input type="text" id ="enterCode" name = "enterCode" required>
         <input type="submit" value="Play" style="width: 300px; margin: 0 auto;">
     </form>
-    
+
 </body>
 
