@@ -28,9 +28,12 @@
                 });
     
                 document.getElementById('sendMessageButton').addEventListener('click', () => {
-                    const message = { text: 'Ping Pong!' };
-                    window.socket.emit('clientMessage', message);
+                    window.socket.emit('tryCreateParty', 3);
                 });
+
+                window.socket.on('createParty', (data) => {
+                    console.log(data);
+                })
             });
         });
     </script>
