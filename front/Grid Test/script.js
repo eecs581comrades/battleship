@@ -12,6 +12,15 @@ let isHorizontal = true;
 let placedShips = 0;
 let isAttackMode = false;
 
+// Store player ships' coordinates in this object
+const playerShips = {
+    Carrier: [],
+    Battleship: [],
+    Cruiser: [],
+    Submarine: [],
+    Destroyer: []
+};
+
 // Grids for player ship placement and opponent guessing
 const playerShipGrid = Array(10).fill(null).map(() => Array(10).fill(null));
 
@@ -27,27 +36,65 @@ const gameBoardContainer = document.getElementById('gameBoardContainer');
 
 // Create 10x10 grid for placing ships
 function createGrid(container, gridType) {
+    container.innerHTML = ''; // Clear any existing content
+
+    // Create a wrapper for the grid
+    const gridWrapper = document.createElement('div');
+    gridWrapper.classList.add('grid-wrapper');
+
+    // Create column labels
+    const headerRow = document.createElement('div');
+    headerRow.classList.add('header-row');
+
+    // Dummy cell for top-left corner
+    const dummyCell = document.createElement('div');
+    dummyCell.classList.add('dummy-cell');
+    headerRow.appendChild(dummyCell);
+
+    for (let col = 0; col < 10; col++) {
+        const label = document.createElement('div');
+        label.classList.add('header-item');
+        label.textContent = String.fromCharCode(65 + col); // A-J
+        headerRow.appendChild(label);
+    }
+    gridWrapper.appendChild(headerRow);
+
+    // Create grid rows with row labels
     for (let row = 0; row < 10; row++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.classList.add('row');
+
+        // Row label
+        const rowLabel = document.createElement('div');
+        rowLabel.classList.add('row-label');
+        rowLabel.textContent = row + 1; // 1-10
+        rowDiv.appendChild(rowLabel);
+
+        // Create cells
         for (let col = 0; col < 10; col++) {
             const cell = document.createElement('div');
             cell.classList.add('grid-item');
             cell.dataset.row = row + 1;
             cell.dataset.col = col + 1;
-            container.appendChild(cell);
+            rowDiv.appendChild(cell);
 
             // Attach click event listener
             cell.addEventListener('click', function() {
-                const row = parseInt(this.dataset.row) - 1;
-                const col = parseInt(this.dataset.col) - 1;
+                const clickedRow = parseInt(this.dataset.row) - 1;
+                const clickedCol = parseInt(this.dataset.col) - 1;
 
-                if (!isAttackMode && gridType === 'player') {
-                    placeShip(row, col);
-                } else if (isAttackMode && gridType === 'opponent') {
-                    handlePlayerShot(row, col);
+                if (gridType === 'player' && !isAttackMode) {
+                    placeShip(clickedRow, clickedCol);
+                } else if (gridType === 'opponent' && isAttackMode) {
+                    handlePlayerShot(clickedRow, clickedCol);
                 }
             });
         }
+        gridWrapper.appendChild(rowDiv);
     }
+
+    // Append the entire grid with headers to the container
+    container.appendChild(gridWrapper);
 }
 
 createGrid(grid, 'player');
@@ -55,25 +102,30 @@ createGrid(grid, 'player');
 // Function to place a ship
 function placeShip(row, col) {
     if (selectedShip.placed) {
-        console.log(`${selectedShip.name} has already been placed.`);
+        alert(`${selectedShip.name} has already been placed.`);
         return;
     }
 
     if (canPlaceShip(row, col, selectedShip.length, isHorizontal)) {
+        let coordinates = []; // To store the coordinates of the placed ship
+
         for (let i = 0; i < selectedShip.length; i++) {
             if (isHorizontal) {
                 playerShipGrid[row][col + i] = selectedShip.name;
                 markCellAsShip(row, col + i);
+                coordinates.push({ x: row + 1, y: col + 1 + i }); // Store coordinates
             } else {
                 playerShipGrid[row + i][col] = selectedShip.name;
                 markCellAsShip(row + i, col);
+                coordinates.push({ x: row + 1 + i, y: col + 1 }); // Store coordinates
             }
         }
         selectedShip.placed = true;
         placedShips++;
+        playerShips[selectedShip.name] = coordinates; // Store ship coordinates in the playerShips object
         checkAllShipsPlaced();
     } else {
-        console.log('Cannot place ship here.');
+        alert('Cannot place ship here.');
     }
 }
 
@@ -127,6 +179,7 @@ removeShipButton.addEventListener('click', function() {
         return;
     }
 
+    // Clear the ship's coordinates from the grid
     for (let row = 0; row < 10; row++) {
         for (let col = 0; col < 10; col++) {
             if (playerShipGrid[row][col] === selectedShip.name) {
@@ -138,21 +191,30 @@ removeShipButton.addEventListener('click', function() {
             }
         }
     }
+    
+    // Reset ship placement
     selectedShip.placed = false;
     placedShips--;
-    startGameButton.disabled = true;
+    playerShips[selectedShip.name] = []; // Clear ship's coordinates
+    startGameButton.disabled = true; // Disable start game button if all ships are not placed
 });
 
 // Switch to attack mode
 startGameButton.addEventListener('click', function() {
+
     if (isAttackMode) return;
+
     isAttackMode = true;
     gameBoardContainer.style.display = 'flex';
     grid.style.display = 'none';
+    
     createGrid(playerBoard, 'player'); // Display player's placed grid
     createGrid(opponentBoard, 'opponent'); // Create grid for guessing opponent's ships
+    
     displayPlayerShips(); // Show player's ships on their reference grid
     console.log('Game started! Now in attack mode.');
+    
+    startGameButton.disabled = true; // Disable the "Start Game" button after it's clicked once
 });
 
 // Display player's placed ships on the reference grid
