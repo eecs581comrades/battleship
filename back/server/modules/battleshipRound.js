@@ -94,3 +94,5 @@ class BattleshipRound {
     }
 
 }
+
+module.exports = BattleshipRound;
