@@ -230,6 +230,10 @@ startGameButton.addEventListener('click', function() {
 startGameButton.addEventListener('click', function() {
 
     if (isAttackMode) return;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9ce4380f3979d0f10c2bd4f913f859924b507e86
     isAttackMode = true;
     gameBoardContainer.style.display = 'flex';
     grid.style.display = 'none';
