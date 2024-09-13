@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>Socket Client Testing</title>
-    <script src="http://127.0.0.1:5000/socket.io/socket.io.js"></script>
+    <script src="./connection.js"></script>
 </head>
 <body>
     <h3>Real-time Update Testing</h3>
@@ -10,18 +10,35 @@
     <br><br>
     <button id="sendMessageButton">Send Message</button>
     <script>
-        const socket = io('http://127.0.0.1:5000');
-        socket.on('update', (data) => {
-            const updatesDiv = document.getElementById('updates');
-            const newUpdate = document.createElement('p');
-            newUpdate.textContent = `Received update: ${JSON.stringify(data)}`;
-            updatesDiv.appendChild(newUpdate);
-        });
-
-        document.getElementById('sendMessageButton').addEventListener('click', () => {
-            const message = { text: 'Ping Pong!' };
-            socket.emit('clientMessage', message);
+        document.addEventListener("DOMContentLoaded", function () {
+            // Polling to wait until window.socket is available
+            function waitForSocket(callback) {
+                if (window.socket) {
+                    callback();
+                } else {
+                    // Retry every 100ms until window.socket is defined
+                    setTimeout(() => waitForSocket(callback), 100);
+                }
+            }
+    
+            waitForSocket(() => {
+                // Now that window.socket is available, set up event listeners
+                console.log("Socket is now available.");
+    
+                window.socket.on('update', (data) => {
+                    const updatesDiv = document.getElementById('updates');
+                    const newUpdate = document.createElement('p');
+                    newUpdate.textContent = `Received update: ${JSON.stringify(data)}`;
+                    updatesDiv.appendChild(newUpdate);
+                });
+    
+                document.getElementById('sendMessageButton').addEventListener('click', () => {
+                    const message = { text: 'Ping Pong!' };
+                    window.socket.emit('clientMessage', message);
+                });
+            });
         });
     </script>
+    
 </body>
 </html>

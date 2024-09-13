@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Let's Play Battleship!</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://battleship-q6f4.onrender.com/socket.io/socket.io.js"></script>
 </head>
 <body>
     <h1>Battleship Game</h1>
+
+    <div id="setupControls">
 
     <h2>Select a ship to place</h2>
     <select id="shipSelect">
@@ -18,17 +21,18 @@
         <option value="Destroyer">Destroyer (1)</option>
     </select>
 
-    <button id="toggleOrientation">Horizontal</button>
-    <button id="removeShip">Remove Selected Ship</button>
-    <button id="startGame" disabled>Start Game</button>
-
+    
+        <button id="toggleOrientation">Horizontal</button>
+        <button id="removeShip">Remove Selected Ship</button>
+        <button id="startGame" disabled>Start Game</button>
+    </div>
     <br/>
 
     <div id="playerGridContainer">
         <div id="grid"></div>
     </div>
 
-    <h3>Your Grid (left) | Opponent's Grid (right)</h3>
+    <h3 id="gridHeader" style="display: none">Your Grid (left) | Opponent's Grid (right)</h3>
         <br/>
 
     <div id="gameBoardContainer" style="display: none;">

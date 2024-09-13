@@ -1,6 +1,6 @@
 /* General styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Couier New", Monospace;
     text-align: center;
     margin: 0;
     padding: 0;
@@ -77,7 +77,7 @@ button, select {
 .grid-item {
     width: 50px; /* Width of grid cells */
     height: 50px; /* Height of grid cells */
-    background-color: lightblue;
+    background-color: skyblue;
     border: 1px solid black;
     display: flex;
     align-items: center;
@@ -86,7 +86,7 @@ button, select {
 }
 
 .grid-item:hover {
-    background-color: skyblue;
+    background-color: deepskyblue;
 }
 
 #playerGridContainer {
@@ -103,3 +103,27 @@ button, select {
 .ship-placed {
     background-color: rgb(85, 85, 87);
 }
+
+body{
+    background-color: lightblue;
+    border: 5px solid rgb(145, 0, 0);
+  }
+  h1{
+      font-family: "Copperplate", fantasy, serif;
+      text-align: center;
+    }
+  p{
+      font-family: "Couier New", Monospace;
+      text-align: center;
+  }
+  button { /*template from w3schools.com edited for our style*/
+    background-color: #005637;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    margin: 1px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }

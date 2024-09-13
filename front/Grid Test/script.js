@@ -199,10 +199,37 @@ removeShipButton.addEventListener('click', function() {
     startGameButton.disabled = true; // Disable start game button if all ships are not placed
 });
 
+// Get references to additional HTML elements
+const gridHeader = document.getElementById('gridHeader');
+const setupControls = document.getElementById('setupControls');
+
+startGameButton.addEventListener('click', function() {
+    if (isAttackMode) return;
+    isAttackMode = true;
+
+    // Show game board container and header
+    gameBoardContainer.style.display = 'flex';
+    gridHeader.style.display = 'block';
+
+    // Hide grid and control buttons
+    grid.style.display = 'none';
+    setupControls.style.display = 'none';
+
+    // Create grids for both player and opponent
+    createGrid(playerBoard, 'player'); // Player's placed grid
+    createGrid(opponentBoard, 'opponent'); // Opponent's grid
+
+    displayPlayerShips(); // Show player's ships on their reference grid
+    console.log('Game started! Now in attack mode.');
+
+    startGameButton.disabled = true; // Disable the "Start Game" button after it's clicked once
+});
+
+
 // Switch to attack mode
 startGameButton.addEventListener('click', function() {
-    if (isAttackMode) return; // Prevent further clicks if game already started
-    
+
+    if (isAttackMode) return;
     isAttackMode = true;
     gameBoardContainer.style.display = 'flex';
     grid.style.display = 'none';
