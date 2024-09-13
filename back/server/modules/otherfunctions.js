@@ -1,3 +1,0 @@
-function setUserIdCookie(userId){
-    
-}
