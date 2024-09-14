@@ -10,7 +10,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const round = require('./modules/battleshipRound');
-const matchmaking = require('./modules/matchmaking')
+const [ Match, generateUniqueId ] = require('./modules/matchmaking')
 
 const app = express();
 const server = http.createServer(app);
@@ -33,7 +33,7 @@ const io = socketIo(server, {
 
 app.use(bodyParser.json());
 
-const port = 5000;
+const port = 5100;
 const localNetworkHost = '0.0.0.0';
 
 // For setup and original fetching of information
@@ -62,25 +62,27 @@ io.on('connection', (socket) => {
         playerSockets[data.ClientId] = socket;
         socketClientAssociations[socket.id] = data.ClientId;
         console.log("Connection Registered for Client " + data.ClientId + " @ Socket " + socket.id);
+        socket.ClientId = data.ClientId
     });
 
     socket.on('tryCreateParty', (numShips) => {
-        if (playerPartyAssociations[socket.id] !== undefined){
+        if (playerPartyAssociations[socket.ClientId] !== undefined){
             socket.emit('createParty', { status: 'Rejected', reason: 'Target player is already registered in a party' });
             return;
         }
         try{
-            matchId = matchmaking.generateUniqueId();
+            matchId = generateUniqueId();
             while (activeParties[matchId] !== undefined){
-                matchId = matchmaking.generateUniqueId();
+                matchId = generateUniqueId();
             }
-            activeParties[matchId] = socket.id;
-            const newMatch = new Match(socket.id, numShips, matchId)
-            playerPartyAssociations[socket.id] = newMatch;
+            activeParties[matchId] = socket.ClientId;
+            const newMatch = new Match(socket.ClientId, numShips, matchId)
+            playerPartyAssociations[socket.ClientId] = newMatch;
             socket.emit('createParty', {status: 'Success', matchId: matchId});
             return;
         }
         catch(err){
+            console.log(err);
             socket.emit('createParty', {  status: 'Rejected', reason: err});
             return;
         }
@@ -98,7 +100,7 @@ io.on('connection', (socket) => {
         }
         try{
             const curMatch = playerPartyAssociations[activeParties[partyId]];
-            curMatch.addOpponent(socket.id);
+            curMatch.addOpponent(socket.ClientId);
             io.to(curMatch.host).emit('joinParty', { status: 'Join Successful', reason: 'Opponent has joined the game'});
             socket.emit('joinParty', { status: 'Join Successful', reason: 'You have joined party' + partyId + 'successfully'});
             return;
@@ -110,15 +112,15 @@ io.on('connection', (socket) => {
     });
 
     socket.on('tryStartRound', () => {
-        const party = playerPartyAssociations[socket.id];
-        if (party === undefined || party.id == undefined || party.host !== socket.id){
+        const party = playerPartyAssociations[socket.ClientId];
+        if (party === undefined || party.id == undefined || party.host !== socket.ClientId){
             socket.emit('startRound', { status: 'Rejected', reason: 'The requesting player is not a member of an active party'});
             return;
         }
         try{        
             activeRounds[matchId] = party.players;
-            const newRound = new BattleshipRound(socket.id, party.numShips, party.gridDimensions);
-            playerRoundAssociations[socket.id] = newRound;
+            const newRound = new BattleshipRound(socket.ClientId, party.numShips, party.gridDimensions);
+            playerRoundAssociations[socket.ClientId] = newRound;
             party.players.forEach(player => {
                 //playerSockets[player.ClientId].emit('startRound', { status: 'Round Started', players: party.players });
             });
