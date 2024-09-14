@@ -11,29 +11,15 @@
     <button id="sendMessageButton">Send Message</button>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-<<<<<<< HEAD
-            // Polling to wait until window.socket is available
-=======
->>>>>>> 9ce4380f3979d0f10c2bd4f913f859924b507e86
             function waitForSocket(callback) {
                 if (window.socket) {
                     callback();
                 } else {
-<<<<<<< HEAD
-                    // Retry every 100ms until window.socket is defined
-=======
->>>>>>> 9ce4380f3979d0f10c2bd4f913f859924b507e86
                     setTimeout(() => waitForSocket(callback), 100);
                 }
             }
     
             waitForSocket(() => {
-<<<<<<< HEAD
-                // Now that window.socket is available, set up event listeners
-                console.log("Socket is now available.");
-    
-=======
->>>>>>> 9ce4380f3979d0f10c2bd4f913f859924b507e86
                 window.socket.on('update', (data) => {
                     const updatesDiv = document.getElementById('updates');
                     const newUpdate = document.createElement('p');
@@ -42,18 +28,12 @@
                 });
     
                 document.getElementById('sendMessageButton').addEventListener('click', () => {
-<<<<<<< HEAD
-                    const message = { text: 'Ping Pong!' };
-                    window.socket.emit('clientMessage', message);
-                });
-=======
                     window.socket.emit('tryCreateParty', 3);
                 });
 
                 window.socket.on('createParty', (data) => {
                     console.log(data);
                 })
->>>>>>> 9ce4380f3979d0f10c2bd4f913f859924b507e86
             });
         });
     </script>
