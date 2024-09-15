@@ -1,3 +1,10 @@
+//Description: Module file for generation of userId related to the config.json file.
+//Inputs: 
+//Outputs: Unique UserID
+//Sources: 
+//Authors: Matthew Petillo, William Johnson
+//Creation date: 9-10-24
+
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
