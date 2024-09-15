@@ -2,12 +2,14 @@
 ## notes: 9/9 meeting
 peer evaluations! yay! we have to judge each other!
 ### Languages:
-- Frontend: node.js/electron, css, html
-- backend: node.js
+- Frontend: node.js, css, html, JavaScript
+- Backend: node.js
+### Technologies:
+- Frontend: electron, sockets.io
+- Backend: express, sockets.io
 ### Roles:
-- backend: matthew, wil
+- backend: Matthew, Wil
 - frontend: Katie, Emily, Chase
 ### Requirements:
-- frontend: we are not shooting for online rn: only localhost. need design for 10x10 grid, way to put battleships, pull from backend, send states
-- backend: control state, act as mediatry, pass info about strikes
-# WE ARE MEETING TOMORROW (9/10) AT 5:30
+- frontend: Can be played either locally or online. need design for 10x10 grid, way to put battleships, pull from backend, send states
+- backend: control state, act as mediary, pass info about strikes
