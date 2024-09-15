@@ -3,6 +3,7 @@
   },
   "scripts": {
     "clean": "node ./scripts/update-client-id.js",
-    "postinstall": "node ./scripts/create-hook.js"
+    "postinstall": "node ./scripts/create-hook.js",
+    "play": "cd ./front && npm start"
   }
 }
