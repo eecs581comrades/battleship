@@ -72,6 +72,8 @@ io.on('connection', (socket) => {
         socketClientAssociations[socket.id] = data.ClientId;
         console.log("Connection Registered for Client " + data.ClientId + " @ Socket " + socket.id);
         socket.ClientId = data.ClientId
+
+        socket.emit('acknowledgeRegistration', { status: 'Success' });
     });
 
     socket.on('tryCreateParty', (numShips) => {
