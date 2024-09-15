@@ -7,7 +7,7 @@ Authors: Emily Tso
 Creation date: 9-9-24
 */
 
-/* General styles */
+/* general styles */
 body {
     font-family: "Couier New", Monospace;
     text-align: center;
@@ -15,66 +15,66 @@ body {
     padding: 0;
 }
 
-button, select {
+button, select { /* buttons */
     margin: 10px;
     padding: 10px;
     font-size: 16px;
 }
 
-#startGame {
+#startGame { /* start game button */
     background-color: green;
     color: white;
     cursor: pointer;
 }
 
-#startGame:disabled {
+#startGame:disabled { /* disable start game button */
     background-color: gray;
     cursor: not-allowed;
 }
 
-/* Controls section styles */
+/* controls section styles */
 #controls {
     margin: 20px auto;
 }
 
-/* Grid container styles */
+/* grid container styles */
 .grid-wrapper {
     display: inline-block;
     border-collapse: collapse;
     position: relative;
 }
 
-/* Header row styles (column labels) */
+/* column labels */
 .header-row {
     display: flex;
 }
 
-.dummy-cell {
-    width: 50px; /* Width of the dummy cell */
-    height: 50px; /* Height to match grid item */
+.dummy-cell { /* dummy cell for grib labels */
+    width: 50px; /* width */
+    height: 50px; /* height */
     border: 1px solid black;
-    background-color: #f0f0f0; /* Light background */
+    background-color: #f0f0f0; 
 }
 
-.header-item {
-    width: 50px; /* Width of each column label cell */
-    height: 50px; /* Height to match grid item */
+.header-item { /* column cell*/
+    width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid black;
-    background-color: #f0f0f0; /* Light background for column labels */
+    background-color: #f0f0f0;
     font-weight: bold;
 }
 
-/* Row styles (including row labels) */
+/* row labels */
 .row {
     display: flex;
 }
 
-.row-label {
-    width: 50px; /* Width of each row label cell */
-    height: 50px; /* Height to match grid item */
+.row-label { /* row cell */
+    width: 50px; 
+    height: 50px; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,9 +83,9 @@ button, select {
     font-weight: bold;
 }
 
-.grid-item {
-    width: 50px; /* Width of grid cells */
-    height: 50px; /* Height of grid cells */
+.grid-item { /* grid cells */
+    width: 50px;
+    height: 50px; 
     background-color: lightblue;
     border: 1px solid black;
     display: flex;
@@ -94,13 +94,13 @@ button, select {
     cursor: pointer;
 }
 
-.grid-item:hover {
+.grid-item:hover { /* for when cursor hovers over the grid cells */
     background-color: skyblue;
 }
 
 #playerGridContainer {
     display: inline-block;
-    margin: 20px auto; /* Center grid container */
+    margin: 20px auto; /* center grid container */
 }
 
 #gameBoardContainer {
@@ -122,7 +122,7 @@ button, select {
     text-align: center;
     padding: 10px;
     font-family: Arial, sans-serif;
-    display: none; /* Hidden by default, will be shown when an error occurs */
+    display: none; /* hidden by default but shown when an error occurs */
     margin-left: -15px;
   }
   
