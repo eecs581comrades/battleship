@@ -354,7 +354,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         window.socket.on("setNumberOfShips", (data) => {
             if (data.status != "Success"){
-                errorLabel.textContent = "Failed to Register Ship Placements: " + data.reason;
+                errorLabel.textContent = "Failed to fetch number of ships: " + data.reason;
                 errorFooterArea.style.display = "block";
                 return;
             } 
