@@ -31,7 +31,7 @@ Creation date: 9-10-24
     <!--Forms to get the player's input of number of ships to play with if hosting a new game or join code if joining a game-->
     <form id="newGame" style="display:none" ><!--Player is creating game and will redirect to game once number of ships is selected using radio buttons-->
         <p>Number of Ships</p>
-        <div class="ship_select" style="width: 300px; margin: 0 auto;">
+        <div class="ship_select" style="width: 300px; margin: 0 auto; ">
           <input type="radio" id="1" name="ship_select" value="1" required>
           <label for="1">1</label><br>
           <input type="radio" id="2" name="ship_select" value="2" required>
@@ -42,8 +42,8 @@ Creation date: 9-10-24
           <label for="4">4</label><br>
           <input type="radio" id="5" name="ship_select" value="5" required>
           <label for="5">5</label><br>
-        </div>
-        <input id="createPartyButton" type="button" value="Play">
+          <input id="createPartyButton" type="button" value="Play">
+      </div>
     </form>
     <div id="joinGame" style = "display:none"> <!--Player is joining Game and will redirect to game once code is entered-->
         <p>Join Code<p>
@@ -61,7 +61,7 @@ Creation date: 9-10-24
       <p>You've joined a party! We're now waiting for the host to start the game...</p>
     </div>
 
-    <div id ="startButton" style="width: 300px; margin: auto; display:none;">
+    <div id ="startButton" style="width: 300px; margin: auto; display:none; text-align:center;">
       <button id="startGameButton">Start Game!</body>
     </div>
 
