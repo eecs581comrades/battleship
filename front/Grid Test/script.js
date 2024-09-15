@@ -266,8 +266,13 @@ document.addEventListener("DOMContentLoaded", function () {
             
             setupControls.style.display = 'none';
             errorFooterArea.style.display = "none";
-
-            window.socket.emit("registerShipPlacements", playerShips);
+            let filledships = {};
+            for (let [name, positions] in Object.entries(playerShips)){
+                if (positions.length != 0){
+                    filledships[name] = positions;
+                }
+            }
+            window.socket.emit("registerShipPlacements", filledships);
         });
 
         window.socket.on("registerShips", (data) => {
