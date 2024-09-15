@@ -149,6 +149,9 @@ io.on('connection', (socket) => {
         const round = playerRoundAssociations[socket.ClientId];
         if (round === undefined){
             socket.emit('setNumberOfShips', { status: 'Rejected', reason: 'The requesting player is not associated with a round.' });
+            console.log(round);
+            console.log(playerRoundAssociations);
+            console.log(socket.ClientId);
             return;
         }
 
