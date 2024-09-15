@@ -1,10 +1,23 @@
-//wil, a few notes:
-//I've added in a numShips parameter to tryCreateParty, since we're going to need that for future communications
-//
+/* server.js
+Description: The program that initializes and manages the server that facilitates round management and communication between client instances.
+             Uses the express package to host a server on port 5100. The server communicates with clients using sockets.io. Round and Party states
+             are managed by dedicated modules.
+Inputs: None
+Outputs: None
+Sources: node.js, sockets.io, and express official documentation
+Authors: William Johnson, MAtthew Petillo
+Creation date: 9-10-24
+*/
 
-// ALL REQUESTS FROM CLIENTS SHOULD INCLUDE DATA FORMATTED AS A TABLE: { prop: value }
-// ALL REQUESTS FROM CLIENTS MUST INCLUDE A CLIENT ID { ..., ClientId: 123456... ... }
-
+/*
+    Includes relevant packages and libraries. 
+    - Express: For hosting the server at a port
+    - http: For http communication
+    - socket.io: For creating communication link between the server and clients
+    - body-parser: for parsing incoming requests to the server
+    - BattleshipRound: The round manager for battleship gameplay. Controls shot attempts, ship location management, and player groupings.
+    - Match, generateUniqueId: The manager for match making and party grouping. Used to generate codes for sharing and linking players across clients.
+*/
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -12,9 +25,12 @@ const bodyParser = require('body-parser');
 const [ BattleshipRound ] = require('./modules/battleshipRound');
 const [ Match, generateUniqueId ] = require('./modules/matchmaking')
 
+// Initializes the express application and starts hosting the server
 const app = express();
 const server = http.createServer(app);
 
+// These are variables that store current active sessions/parties for global referencing and lookup.
+// IF we wanted to productionize this, it would be better to use a redis cache. But, time limits and all that.
 let playerPartyAssociations = {};
 let playerRoundAssociations = {};
 
@@ -23,6 +39,7 @@ let socketClientAssociations = {};
 
 let activeParties = {};
 
+// Function that cleans up global associations for players to allow them to join new rounds/parties. Also cleans up a party.
 function cleanUpRound(players){
     const party = playerPartyAssociations[players[0]]
     players.forEach(player => {
@@ -33,6 +50,7 @@ function cleanUpRound(players){
     activeParties[party.id] = undefined;
 }
 
+// Initializes sockets.io to allow for client-server communication. Allows Cross-Origin for simplicity. Not the most secure, but will work for us.
 const io = socketIo(server, {
     cors: {
         origin: "*",  // Allow all origins to post to this server.
@@ -40,8 +58,10 @@ const io = socketIo(server, {
     }
 });
 
+// Registers the app to use bodyParser to make our lives easier and avoid needing to decode json frequently.
 app.use(bodyParser.json());
 
+// Server definition
 const port = 5100;
 const localNetworkHost = '0.0.0.0';
 
