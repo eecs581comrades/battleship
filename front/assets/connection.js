@@ -33,3 +33,4 @@ window.api.loadConfig()
         document.head.appendChild(script);
     })
     .catch(error => console.error("Error loading config.json:", error));
+    
