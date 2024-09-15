@@ -17,11 +17,11 @@ window.api.loadConfig()
 
             const new_socket = io(serverAddress);
 
-            window.socket.on('getClientId', () => {
+            new_socket.on('getClientId', () => {
                 socket.emit('registerClientId', { ClientId: config.ClientId });
             });
 
-            window.socket.on('acknowledgeRegistration', ( data ) => {
+            new_socket.on('acknowledgeRegistration', ( data ) => {
                 window.socket = new_socket;
             });
         };
