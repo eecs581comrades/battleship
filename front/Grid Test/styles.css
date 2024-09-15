@@ -1,3 +1,12 @@
+/*
+Description: Styles and colors of the page
+Inputs: 
+Outputs: Visuals for the gameboard page
+Sources: stackoverflow.com (refresh how to do css)
+Authors: Emily Tso
+Creation date: 9-9-24
+*/
+
 /* General styles */
 body {
     font-family: "Couier New", Monospace;

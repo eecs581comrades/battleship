@@ -1,9 +1,11 @@
-//Description: 
-//Inputs: 
-//Outputs: 
-//Sources: 
-//Authors: Chase Curtis, William Johnson, Matthew Petillo
-//Creation date: 9-10-24
+/*
+Description: Grid creation, placing ships, game logic
+Inputs: 
+Outputs: Handles Game Logic and Game page
+Sources: stackoverflow.com (refresh how to using javascript and handling containers)
+Authors: Chase Curtis, William Johnson, Matthew Petillo, Emily Tso
+Creation date: 9-9-24
+*/
 
 // Ship details
 const ships = [
