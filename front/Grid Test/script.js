@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let count = 5;
             const curShips = Object.keys(ships);
             for (let ship in curShips){
-                if (count > numShips && ships[ship].length() != 0){
+                if (count > numShips && ships[ship].length != 0){
                     return false;
                 }
                 else if (count <= numShips && ships[ship].length != count){
@@ -359,8 +359,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 errorFooterArea.style.display = "block";
                 return;
             }
-            numShips = data.numShips; 
-            a
+            numShips = data.numShips;
         });
 
         window.socket.emit("fetchNumberOfShips", {});
