@@ -7,7 +7,7 @@ const ships = [
     { name: 'Destroyer', length: 1, placed: false }
 ];
 
-let selectedShip = ships[0];
+let selectedShip = ships[4];
 let isHorizontal = true;
 let placedShips = 0;
 let isAttackMode = false;
@@ -53,11 +53,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function addShipOptions(){
+            shipSelect.innerHTML = "";
             options = ['<option value="Destroyer">Destroyer (1)</option>', '<option value="Submarine">Submarine (2)</option>', '<option value="Cruiser">Cruiser (3)</option>', '<option value="Battleship">Battleship (4)</option>', '<option value="Carrier">Carrier (5)</option>'];
             for (let i = 0; i < numShips; i++){
                 shipSelect.innerHTML += options[i];
             }
-        }
+        }   
 
         // Create 10x10 grid for placing ships
         function createGrid(container, gridType) {
@@ -357,8 +358,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 errorLabel.textContent = "Failed to fetch number of ships: " + data.reason;
                 errorFooterArea.style.display = "block";
                 return;
-            } 
+            }
             numShips = data.numShips; 
+            a
         });
 
         window.socket.emit("fetchNumberOfShips", {});

@@ -2,7 +2,7 @@
 ### Created by William Johnson
 
 ## Installation
-The battleship server can be run locally, or hosted via a cloud service. We recommend https://render.com/'s free tier for simplicity.
+The battleship server can be run locally, or hosted via a cloud service. We recommend https://render.com/ 's free tier for simplicity.
 To run a BattlShip Server locally, do the following:
 
 ### 0. Ensure that you have Node.JS installed. It can be found at https://nodejs.org/en. 
@@ -25,4 +25,9 @@ However, in general, there should be no need to modify the server port.
 
 
 ## Running in Live Mode
-To play using a cloud hosted server, ...
+To play using a cloud hosted server, before any playing can begin, you must replace the "LiveServerAddress" link for all clients. Again, we recommend render. You must use a web service to run this game - private services will not work. 
+
+To get your github repo working in Render:
+
+### 0. Sign in with your Github account. 
+### 1. Paste the repo that you plan to use for this 
