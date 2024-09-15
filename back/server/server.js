@@ -96,19 +96,20 @@ io.on('connection', (socket) => {
         socket.emit('acknowledgeRegistration', { status: 'Success' });
     });
 
+    //Creates party and stores party id serverside
     socket.on('tryCreateParty', (numShips) => {
-        if (playerPartyAssociations[socket.ClientId] !== undefined){
+        if (playerPartyAssociations[socket.ClientId] !== undefined){//checks if player is already in party
             socket.emit('createParty', { status: 'Rejected', reason: 'Target player is already registered in a party' });
             return;
         }
         try{
-            matchId = generateUniqueId();
-            while (activeParties[matchId] !== undefined){
+            matchId = generateUniqueId();//see modules/matchmaking.js
+            while (activeParties[matchId] !== undefined){//checks for duplicates
                 matchId = generateUniqueId();
             }
             const newMatch = new Match(socket.ClientId, numShips, matchId)
-            activeParties[matchId] = newMatch;
-            playerPartyAssociations[socket.ClientId] = newMatch;
+            activeParties[matchId] = newMatch;//stories matchid with new match instance
+            playerPartyAssociations[socket.ClientId] = newMatch; //associates client with party
             socket.emit('createParty', {status: 'Success', matchId: matchId});
             return;
         }
@@ -120,16 +121,17 @@ io.on('connection', (socket) => {
 
     });
 
+    //for opponent - associates opponent player with party
     socket.on('tryJoinParty', (partyId) => {
         if (activeParties[partyId] === undefined){
-            socket.emit('joinParty', { status: 'Rejected', reason: 'Requested party could not be found' });
+            socket.emit('joinParty', { status: 'Rejected', reason: 'Requested party could not be found' }); //lol you tried to join a bad party
             return;
         }
         else if (activeParties[partyId].players.length > 1){
-            socket.emit('joinParty', { status: 'Rejected', reason: 'Party is full'});
+            socket.emit('joinParty', { status: 'Rejected', reason: 'Party is full'}); //checks if party already has two players
             return;
         }
-        try{
+        try{ //associates opponent with party id and lets host know that party is full and game can be started
             const party = activeParties[partyId];
             party.addOpponent(socket.ClientId);
             playerPartyAssociations[socket.ClientId] = party;
@@ -144,17 +146,21 @@ io.on('connection', (socket) => {
         }
     });
 
+
+    //starts round if all players are ready
     socket.on('tryStartRound', () => {
         const party = playerPartyAssociations[socket.ClientId];
+        //checks for bad party, no party, bad host
         if (party === undefined || party.id == undefined || party.host !== socket.ClientId){
             socket.emit('startRound', { status: 'Rejected', reason: 'The requesting player is not a member of an active party'});
             return;
         }
+        //creates new round and places all players in that round
         try{        
             const newRound = new BattleshipRound(socket.ClientId, party.numShips, party.gridDimensions);
             const randomIndex = Math.floor(Math.random() * party.players.length);
             newRound.whosTurn = party.players[randomIndex];
-            party.players.forEach(player => {
+            party.players.forEach(player => { //associates all players with the new round
                 playerSockets[player].emit('startRound', { status: 'Success', players: party.players });
                 newRound.addPlayer(player);
                 playerRoundAssociations[player] = newRound;
@@ -167,9 +173,11 @@ io.on('connection', (socket) => {
         }
     });
 
+
+    //returns number of ships
     socket.on('fetchNumberOfShips', () => {
         const round = playerRoundAssociations[socket.ClientId];
-        if (round === undefined){
+        if (round === undefined){ //this, in theory, should never be activated because it's impossible to run this function unless you're associated with a round
             socket.emit('setNumberOfShips', { status: 'Rejected', reason: 'The requesting player is not associated with a round.' });
             console.log(round);
             console.log(playerRoundAssociations);
@@ -177,8 +185,9 @@ io.on('connection', (socket) => {
             return;
         }
 
-        socket.emit('setNumberOfShips', { status: 'Success', numShips: round.numberOfShips });
+        socket.emit('setNumberOfShips', { status: 'Success', numShips: round.numberOfShips }); //returns num of ships to client
     });
+
 
     socket.on('registerShipPlacements', (shipData) => {
         const round = playerRoundAssociations[socket.ClientId];
