@@ -24,8 +24,8 @@ fetch('./config.json')
             });
         };
 
-        script.onerror = () => {
-            console.error("Failed to load the Socket.IO script from:", serverAddress);
+        script.onerror = (err) => {
+            console.error("Failed to load the Socket.IO script from:", serverAddress, ":", err);
         };
 
         document.head.appendChild(script);
