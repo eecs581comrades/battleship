@@ -145,6 +145,16 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('fetchNumberOfShips', () => {
+        const round = playerRoundAssociations[socket.ClientId];
+        if (round === undefined){
+            socket.emit('setNumberOfShips', { status: 'Rejected', reason: 'The requesting player is not associated with a round.' });
+            return;
+        }
+
+        socket.emit('setNumberOfShips', { status: 'Success', numShips: round.numberOfShips });
+    });
+
     socket.on('registerShipPlacements', (shipData) => {
         const round = playerRoundAssociations[socket.ClientId];
         if (round === undefined){
