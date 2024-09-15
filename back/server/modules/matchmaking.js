@@ -1,3 +1,12 @@
+/* matchmaking.js
+Description: Matchmaking module. Creates data structures for matches that keeps all necessary information required by server
+Inputs: None
+Outputs: Match, generateUniqueId
+Sources: 
+Authors: Matthew Petillo
+Creation date: 9-10-24
+*/
+
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
