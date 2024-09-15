@@ -2,23 +2,27 @@
 Description: Makes the starting screen look nice
 Inputs: 
 Outputs: 
-Sources: w3schools.com
-Authors: Katie Golder
+Sources: w3schools.com (General css elements)
+Authors: Katie Golder, William Johnson
 Creation date: 9-11-24
--->*/
-body{
+*/
+
+body{/*Creates the background color and border */
   background-color: lightblue;
   border: 5px solid rgb(145, 0, 0);
 }
-h1, h2, h3, h4{
+
+h1, h2, h3, h4{/*Defines the font for headers and centers them */
     font-family: "Copperplate", fantasy, serif;
     text-align: center;
   }
-p{
+
+p{/*Defines the font for paragraphs and centers them */
     font-family: "Couier New", Monospace;
     text-align: center;
 }
-button { /*template from w3schools.com edited for our style*/
+
+button { /*template from w3schools.com for button styling with colors edited for our style*/
   background-color: #005637;
   border: none;
   color: white;
@@ -29,7 +33,8 @@ button { /*template from w3schools.com edited for our style*/
   display: inline-block;
   font-size: 16px;
 }
-.error-footer {
+
+.error-footer {/*Styles the error footer design */
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -41,6 +46,7 @@ button { /*template from w3schools.com edited for our style*/
   display: none; /* Hidden by default, will be shown when an error occurs */
   margin-left: -15px;
 }
-.error-footer p {
+
+.error-footer p {/*Defines no margin for the paragraph in the footer */
   margin: 0;
 }
