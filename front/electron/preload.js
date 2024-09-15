@@ -8,6 +8,6 @@ contextBridge.exposeInMainWorld('versions', {
   // we can also expose variables, not just functions
 })
 
-contextBridge.exposeInMainWorld('API', {
-  userId: () => require('userId.js')
-})
+contextBridge.exposeInMainWorld('api', {
+  loadConfig: () => ipcRenderer.invoke('load-config'),
+});

@@ -3,21 +3,16 @@ const fs = require('fs');
 const path = require('path');
 
 function generateUniqueId(length = 32) {
-    let id;
-    do {
-      id = crypto.randomBytes(length)
+    let id = crypto.randomBytes(length)
         .toString('base64')
         .replace(/[^a-zA-Z0-9]/g, '')
         .substring(0, length);
-    } while (generatedIds.has(id)); // Keep generating if the ID already exists
-  
-    generatedIds.add(id); // Add the new ID to the Set
     return id;
   }
 
 function updateUserId(userId){
     //read the json file
-    const filePath = path.join(__dirname, 'config.json');
+    const filePath = path.join(__dirname, '../assets/config.json');
     fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
         console.error('Error reading file:', err);
@@ -53,4 +48,6 @@ function checkClientId(){
     return jsonData.ClientId;
 });
 }
+
+module.exports = [ checkClientId, updateUserId, generateUniqueId ]
 

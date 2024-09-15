@@ -1,5 +1,4 @@
-fetch('./config.json')
-    .then(response => response.json())
+window.api.loadConfig()
     .then(config => {
         let serverAddress;
         if (config.Build === "Dev") {
