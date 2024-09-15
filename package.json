@@ -3,6 +3,6 @@
     "husky": "^9.1.6"
   },
   "scripts": {
-    "prepare": "husky install"
+    "pre-commit": "node path/to/your-script.js"
   }
 }
