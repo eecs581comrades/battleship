@@ -11,3 +11,7 @@ contextBridge.exposeInMainWorld('versions', {
 contextBridge.exposeInMainWorld('api', {
   loadConfig: () => ipcRenderer.invoke('load-config'),
 });
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  navigateToPage: (page) => ipcRenderer.send('navigate-to-page', page)
+});

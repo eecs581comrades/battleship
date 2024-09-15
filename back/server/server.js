@@ -9,7 +9,7 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
-const round = require('./modules/battleshipRound');
+const [ BattleshipRound ] = require('./modules/battleshipRound');
 const [ Match, generateUniqueId ] = require('./modules/matchmaking')
 
 const app = express();
@@ -75,8 +75,8 @@ io.on('connection', (socket) => {
             while (activeParties[matchId] !== undefined){
                 matchId = generateUniqueId();
             }
-            activeParties[matchId] = socket.ClientId;
             const newMatch = new Match(socket.ClientId, numShips, matchId)
+            activeParties[matchId] = newMatch;
             playerPartyAssociations[socket.ClientId] = newMatch;
             socket.emit('createParty', {status: 'Success', matchId: matchId});
             return;
@@ -94,19 +94,20 @@ io.on('connection', (socket) => {
             socket.emit('joinParty', { status: 'Rejected', reason: 'Requested party could not be found' });
             return;
         }
-        else if (activeParties[partyId].length > 1){
-            socket.emit('joinParty', { status: 'Rejected', reason: 'Party is full'})
+        else if (activeParties[partyId].players.length > 1){
+            socket.emit('joinParty', { status: 'Rejected', reason: 'Party is full'});
             return;
         }
         try{
-            const curMatch = playerPartyAssociations[activeParties[partyId]];
+            const curMatch = activeParties[partyId];
             curMatch.addOpponent(socket.ClientId);
-            io.to(curMatch.host).emit('joinParty', { status: 'Join Successful', reason: 'Opponent has joined the game'});
-            socket.emit('joinParty', { status: 'Join Successful', reason: 'You have joined party' + partyId + 'successfully'});
+            playerSockets[curMatch.host].emit('opponentJoined', { status: 'Success', reason: 'Opponent has joined the game'});
+            socket.emit('joinParty', { status: 'Success', reason: 'You have joined party' + partyId + 'successfully'});
             return;
         }
         catch(err){
-            socket.emit('joinParty', { status: 'Error', reason: err});
+            socket.emit('joinParty', { status: 'Rejected', reason: err.toString()});
+            console.log(err);
             return;
         }
     });
@@ -118,15 +119,15 @@ io.on('connection', (socket) => {
             return;
         }
         try{        
-            activeRounds[matchId] = party.players;
             const newRound = new BattleshipRound(socket.ClientId, party.numShips, party.gridDimensions);
             playerRoundAssociations[socket.ClientId] = newRound;
             party.players.forEach(player => {
-                //playerSockets[player.ClientId].emit('startRound', { status: 'Round Started', players: party.players });
+                playerSockets[player].emit('startRound', { status: 'Success', players: party.players });
             });
         }
         catch (err){
-            socket.emit('startRound', {status: 'Error', reason: err});
+            socket.emit('startRound', {status: 'Error', reason: err.toString()});
+            console.log(err);
             return;
         }
     });

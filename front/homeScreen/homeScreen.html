@@ -3,77 +3,209 @@ Description: The starting screen and setting selection for joining or creating a
 Inputs: Game code or how many ships
 Outputs: Links to main.html to play game
 Sources: stackoverflow.com, w3schools.com, programminghead.com
-Authors: Katie Golder
+Authors: Katie Golder, William Johnson
 Creation date: 9-10-24
 -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://battleship-q6f4.onrender.com/socket.io/socket.io.js"></script>
+  <script src="../assets/connection.js"></script>
   <title>Begin Battleship Game</title>
   <h1>Let's Play Battleship</h1>
   <link rel="stylesheet" href="styleHomeScreen.css"> <!--Adds style-->
 </head>
 
 <body>
-    <!--Create buttons for player to start or join a game which activates that function-->
-    <div id ="buttons" style="width: 300px; margin: auto">
-    <button onclick="newGame()">New Game</body>
-    <button onclick="joinGame()">Join Game</button>
+
+    <div id="loading">
+      <h3>Waiting for Battleship Server...</h3>
+      <p>If this message persists, please make sure that you are running the battleship server program on the local computer, and that the config "Build" value is set to "Dev".</p>
     </div>
-    
-    <!--Functions defining to show or hide the corresponding form per game mode selection -->
-    <script>
-        function newGame() {
-          document.getElementById("newGame").style.display = "block";
-          document.getElementById("joinGame").style.display = "none";
-          document.getElementById('buttonExample').addEventListener('click', () => { //Send request
-            const data = { text: 'Ping Pong!' };
-            socket.emit('tryCreateParty', "#newGame");
-          const socket = io('https://battleship-q6f4.onrender.com/');
-            socket.on('nameOfCallType', (data_or_name_of_data) => {
-            fetch("../Grid Test/main.html");
-          });
-      });
-        }
-        function joinGame() {
-          document.getElementById("joinGame").style.display = "block";
-          document.getElementById("newGame").style.display = "none";
-          document.getElementById('buttonExample').addEventListener('click', () => { //Send request
-            const data = { text: 'Ping Pong!' };
-            socket.emit('tryCreateParty', "#joinGame");
-          const socket = io('https://battleship-q6f4.onrender.com/');
-            socket.on('nameOfCallType', (data_or_name_of_data) => {
-            fetch("../Grid Test/main.html");
-          });
-        });
-      }
-    </script>
+    <!--Create buttons for player to start or join a game which activates that function-->
+    <div id ="buttons" style="width: 300px; margin: auto; display:none;">
+      <button id="newGameButton">New Game</body>
+      <button id="joinGameButton">Join Game</button>
+    </div>
 
     <!--Forms to get the player's input of number of ships to play with if hosting a new game or join code if joining a game-->
     <form id="newGame" style="display:none" ><!--Player is creating game and will redirect to game once number of ships is selected using radio buttons-->
         <p>Number of Ships</p>
         <div class="ship_select" style="width: 300px; margin: 0 auto;">
-        <input type="radio" id="1" name="ship_select" value="1" required>
-        <label for="1">1</label><br>
-        <input type="radio" id="2" name="ship_select" value="2" required>
-        <label for="2">2</label><br>
-        <input type="radio" id="3" name="ship_select" value="3" required>
-        <label for="3">3</label><br>
-        <input type="radio" id="4" name="ship_select" value="4" required>
-        <label for="4">4</label><br>
-        <input type="radio" id="5" name="ship_select" value="5" required>
-        <label for="5">5</label><br>
+          <input type="radio" id="1" name="ship_select" value="1" required>
+          <label for="1">1</label><br>
+          <input type="radio" id="2" name="ship_select" value="2" required>
+          <label for="2">2</label><br>
+          <input type="radio" id="3" name="ship_select" value="3" required checked>
+          <label for="3">3</label><br>
+          <input type="radio" id="4" name="ship_select" value="4" required>
+          <label for="4">4</label><br>
+          <input type="radio" id="5" name="ship_select" value="5" required>
+          <label for="5">5</label><br>
         </div>
-        <p>Your code is: ######<p>
-        <input type="submit" value="Play">
+        <input id="createPartyButton" type="button" value="Play">
     </form>
-    <form id="joinGame" style = "display:none"> <!--Player is joining Game and will redirect to game once code is entered-->
+    <div id="joinGame" style = "display:none"> <!--Player is joining Game and will redirect to game once code is entered-->
         <p>Join Code<p>
-        <input type="text" id ="enterCode" name = "enterCode" required>
-        <input type="submit" value="Play" style="width: 300px; margin: 0 auto;">
-    </form>
+        <input id="joinCodeField" type="text" id ="enterCode" name = "enterCode" required>
+        <input id="joinPartyButton" type="submit" value="Play" style="width: 300px; margin: 0 auto;">
+    </div>
+    <div id="displayPartyCode" style="display:none">
+      <h3>Party Code</h3>
+      <p>Share this code with your oponent so they can join the round!</p>
+      <h2 id="partyCode">[Loading...]</h2>
+    </div>
+
+    <div id="waitingForHost" style="display:none">
+      <h3>Waiting for Host...</h3>
+      <p>You've joined a party! We're now waiting for the host to start the game...</p>
+    </div>
+
+    <div class="error-footer" id="errorFooter">
+        <p id="errorLabel">Error: Something went wrong. Please try again later.</p>
+    </div>
+
+    <div id ="startButton" style="width: 300px; margin: auto; display:none;">
+      <button id="startGameButton">Start Game!</body>
+    </div>
+
+    <p id="loadingGameScreen" style="display:none">Beginning Round...</p>
+
+
+    <!--Functions defining to show or hide the corresponding form per game mode selection -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          function waitForSocket(callback) {
+              if (window.socket) {
+                  callback();
+              } else {
+                  setTimeout(() => waitForSocket(callback), 100);
+              }
+          }
+  
+          waitForSocket(() => {
+
+            const newGameArea = document.getElementById("newGame");
+            const joinGameArea = document.getElementById("joinGame");
+            const partyCodeArea = document.getElementById("displayPartyCode");
+            const buttonsArea = document.getElementById("buttons");
+            const loadingArea = document.getElementById("loading");
+            const waitingArea = document.getElementById("waitingForHost");
+            const startGameArea = document.getElementById("startButton");
+
+            const newGameButton = document.getElementById("newGameButton");
+            const joinGameButton = document.getElementById("joinGameButton");
+            const createPartyButton = document.getElementById("createPartyButton");
+            const joinPartyButton = document.getElementById("joinPartyButton");
+            const startGameButton = document.getElementById("startGameButton");
+
+            const partyCodeLabel = document.getElementById("partyCode");
+            const joinCodeField = document.getElementById("joinCodeField");
+            const loadingGameLabel = document.getElementById("loadingGameScreen");
+
+            const errorFooterArea = document.getElementById("errorFooter");
+            const errorLabel = document.getElementById("errorLabel");
+
+            loadingArea.style.display = "none"; // We are now loaded so we can hide this.
+            buttonsArea.style.display = "block";
+
+            // Number of Ships Checking
+            const radios = document.getElementsByName('ship_select');
+
+            function newGame() {
+              newGameArea.style.display = "block";
+              joinGameArea.style.display = "none";
+              errorFooterArea.style.display = "none";
+            }
+
+            newGameButton.addEventListener('click', () => {
+              newGame();
+            });
+
+            createPartyButton.addEventListener('click', () => { //Send request
+              let numberOfShips = 3;
+              
+              // Loop through the radio buttons to find the checked one
+              for (const radio of radios) {
+                if (radio.checked) {
+                  numberOfShips = radio.value; // Store the value of the selected radio button
+                  break;
+                }
+              }
+
+              socket.emit('tryCreateParty', numberOfShips);
+            });
+
+            socket.on('createParty', (data) => {
+              if (data.status == "Success"){
+                newGameArea.style.display = "none";
+                buttonsArea.style.display = "none";
+                partyCodeLabel.textContent = data.matchId;
+                partyCodeArea.style.display = "block";
+              } else {
+                errorLabel.textContent = "Failed to Create Party: " + data.reason;
+                errorFooterArea.style.display = "block";
+                newGameArea.style.display = "none";
+              }
+            });
+
+            //fetch("../Grid Test/main.html");
+
+            function joinGame() {
+              document.getElementById("joinGame").style.display = "block";
+              document.getElementById("newGame").style.display = "none";
+              errorFooterArea.style.display = "none";
+            }
+
+            joinGameButton.addEventListener('click', () => {
+              joinGame();
+            });
+
+            joinPartyButton.addEventListener('click', () => { //Send request
+              socket.emit('tryJoinParty', joinCodeField.value);
+            });
+
+            socket.on('joinParty', (data) => {
+                if (data.status == "Success"){
+                  joinGameArea.style.display = "none";
+                  buttonsArea.style.display = "none";
+                  waitingArea.style.display = "block";
+                } else {
+                  errorLabel.textContent = "Failed to Join Party: " + data.reason;
+                  errorFooterArea.style.display = "block";
+                  joinGameArea.style.display = "none";
+                }
+            });
+
+
+            socket.on('opponentJoined', (data) => {
+              if (data.status == "Success"){
+                partyCodeArea.style.display = "none";
+                startGameArea.style.display = "block";
+              }
+            });
+
+            startGameButton.addEventListener('click', () => {
+              startGameArea.style.display = "none";
+              socket.emit('tryStartRound', {});
+            });
+
+            socket.on('startRound', (data) => {
+              if (data.status == "Success"){
+                waitingArea.style.display = "none";
+                loadingGameLabel.style.display = "block";
+                window.electronAPI.navigateToPage("./Grid Test/main.html");
+              } else {
+                errorLabel.textContent = "Fatal Error: Failed to Start Round: " + data.reason;
+                errorFooterArea.style.display = "block";
+                startGameArea.style.display = "none";
+              }
+            });
+
+
+          });
+      });
+  </script>
 
 </body>
 

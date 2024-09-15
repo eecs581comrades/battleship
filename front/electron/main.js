@@ -11,16 +11,20 @@ console.log("Client " + userId + " Initialized");
 
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
     webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: false,
         contextIsolation: true,
     }
-  })
+  });
 
-  win.loadFile('../front/front.html')
+  ipcMain.on('navigate-to-page', (event, page) => {
+    win.loadFile(page); // Load a new HTML file
+  });
+
+  win.loadFile('../front/homeScreen/homeScreen.html');
 }
 
 app.whenReady().then(() => {
@@ -44,7 +48,7 @@ app.whenReady().then(() => {
             }
         });
     });
-});
+  });
 })
 
 app.on('window-all-closed', () => {
