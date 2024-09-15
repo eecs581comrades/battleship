@@ -182,15 +182,19 @@ document.addEventListener("DOMContentLoaded", function () {
         // Check if all ships are placed
         function checkAllShipsPlaced() {
             let count = 5;
-            const curShips = Object.keys(ships);
-            for (let ship in curShips){
-                if (count > numShips && ships[ship].length != 0){
+            const curShips = Object.keys(playerShips);
+            console.log(curShips);
+            console.log(Object.values(curShips))
+            for (let ship in Object.values(curShips)){
+                if (count > numShips && playerShips[curShips[ship]].length != 0){
                     return false;
                 }
-                else if (count <= numShips && ships[ship].length != count){
+                else if (count <= numShips && playerShips[curShips[ship]].length != count){
                     return false;
                 }
+                count--;
             }
+            startGameButton.disabled = false;
             return true;
         }
 
@@ -360,6 +364,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
             numShips = data.numShips;
+            addShipOptions();
         });
 
         window.socket.emit("fetchNumberOfShips", {});
