@@ -11,6 +11,7 @@ let selectedShip = ships[0];
 let isHorizontal = true;
 let placedShips = 0;
 let isAttackMode = false;
+let numShips = 0;
 
 // Store player ships' coordinates in this object
 const playerShips = {
@@ -34,6 +35,7 @@ const playerBoard = document.getElementById('playerBoard');
 const opponentBoard = document.getElementById('opponentBoard');
 const gameBoardContainer = document.getElementById('gameBoardContainer');
 
+
 document.addEventListener("DOMContentLoaded", function () {
     function waitForSocket(callback) {
         if (window.socket) {
@@ -48,6 +50,13 @@ document.addEventListener("DOMContentLoaded", function () {
         function handlePlayerShot(row, col) {
             console.log(`Player shot at: Row ${row + 1}, Col ${col + 1}`);
             window.socket.emit("tryHit", { x: row, y: col });
+        }
+
+        function addShipOptions(){
+            options = ['<option value="Destroyer">Destroyer (1)</option>', '<option value="Submarine">Submarine (2)</option>', '<option value="Cruiser">Cruiser (3)</option>', '<option value="Battleship">Battleship (4)</option>', '<option value="Carrier">Carrier (5)</option>'];
+            for (let i = 0; i < numShips; i++){
+                shipSelect.innerHTML += options[i];
+            }
         }
 
         // Create 10x10 grid for placing ships
@@ -171,9 +180,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Check if all ships are placed
         function checkAllShipsPlaced() {
-            if (placedShips === ships.length) {
-                startGameButton.disabled = false;
+            let count = 5;
+            const curShips = Object.keys(ships);
+            for (let ship in curShips){
+                if (count > numShips && ships[ship].length() != 0){
+                    return false;
+                }
+                else if (count <= numShips && ships[ship].length != count){
+                    return false;
+                }
             }
+            return true;
         }
 
         // Handle ship selection change
@@ -334,5 +351,16 @@ document.addEventListener("DOMContentLoaded", function () {
         window.socket.on("youLost", (data) => {
             window.electronAPI.navigateToPage("./gameOver/looser.html");
         });
+
+        window.socket.on("setNumberOfShips", (data) => {
+            if (data.status != "Success"){
+                errorLabel.textContent = "Failed to Register Ship Placements: " + data.reason;
+                errorFooterArea.style.display = "block";
+                return;
+            } 
+            numShips = data.numShips; 
+        });
+
+        window.socket.emit("fetchNumberOfShips", {});
     });
 });
