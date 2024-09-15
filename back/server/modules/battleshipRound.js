@@ -95,4 +95,4 @@ class BattleshipRound {
 
 }
 
-module.exports = BattleshipRound;
+module.exports = [ BattleshipRound ];

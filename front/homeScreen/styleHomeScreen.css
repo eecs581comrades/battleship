@@ -10,7 +10,7 @@ body{
   background-color: lightblue;
   border: 5px solid rgb(145, 0, 0);
 }
-h1{
+h1, h2, h3, h4{
     font-family: "Copperplate", fantasy, serif;
     text-align: center;
   }
@@ -28,4 +28,19 @@ button { /*template from w3schools.com edited for our style*/
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+}
+.error-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #f44336;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  display: none; /* Hidden by default, will be shown when an error occurs */
+  margin-left: -15px;
+}
+.error-footer p {
+  margin: 0;
 }
