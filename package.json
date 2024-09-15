@@ -3,6 +3,6 @@
     "husky": "^9.1.6"
   },
   "scripts": {
-    "pre-commit": "node path/to/your-script.js"
+    "pre-commit": "scripts/update-client-id.js"
   }
 }
