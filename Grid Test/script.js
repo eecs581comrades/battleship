@@ -186,7 +186,7 @@ removeShipButton.addEventListener('click', function() {
                 playerShipGrid[row][col] = null;
                 const cell = document.querySelector(`[data-row="${row + 1}"][data-col="${col + 1}"]`);
                 if (cell) {
-                    cell.style.backgroundColor = 'lightblue';
+                    cell.style.backgroundColor = 'skyblue';
                 }
             }
         }
@@ -230,10 +230,6 @@ startGameButton.addEventListener('click', function() {
 startGameButton.addEventListener('click', function() {
 
     if (isAttackMode) return;
-<<<<<<< HEAD
-=======
-
->>>>>>> 9ce4380f3979d0f10c2bd4f913f859924b507e86
     isAttackMode = true;
     gameBoardContainer.style.display = 'flex';
     grid.style.display = 'none';
@@ -264,5 +260,56 @@ function displayPlayerShips() {
 // Handle player's shot during attack mode
 function handlePlayerShot(row, col) {
     console.log(`Player shot at: Row ${row + 1}, Col ${col + 1}`);
-    // You can add more logic here later (e.g., handle hit or miss on opponent grid)
+    
+    // Simulate sending data to the server for hit/miss check (to be replaced with actual server logic)
+    let hit = simulateServerCheck(row, col); // Simulate hit or miss (this will eventually be server-driven)
+
+    const cell = document.querySelector(`#opponentBoard [data-row="${row + 1}"][data-col="${col + 1}"]`);
+
+    if (!cell || cell.classList.contains('clicked')) {
+        alert('You already shot at this cell!');
+        return; // Prevent shooting at the same spot again
+    }
+
+    if (hit) {
+        // If it's a hit, color the opponent's grid cell red
+        if (cell) {
+            cell.style.backgroundColor = 'red'; // Mark hit
+        }
+    } else {
+        // If it's a miss, color the opponent's grid cell blue
+        if (cell) {
+            cell.style.backgroundColor = 'blue'; // Mark miss
+        }
+    }
+
+    cell.classList.add('clicked'); // Use a CSS class to track that the cell has been shot at
+
+}
+
+// Simulate hit/miss result from server (for testing)
+function simulateServerCheck(row, col) {
+    // Randomly decide hit or miss (you'll replace this with actual server logic)
+    return Math.random() > 0.5; // 50% chance for a hit
+}
+
+function handleOpponentShot(row, col) {
+    console.log(`Opponent shot at: Row ${row}, Col ${col}`);
+    
+    // Simulate checking if opponent hit a ship
+    let hit = playerShipGrid[row-1][col-1] !== null; // Check if there's a ship in this position
+
+    if (hit) {
+        // If it's a hit, color the player's grid cell red
+        const cell = document.querySelector(`#playerBoard [data-row="${row}"][data-col="${col}"]`);
+        if (cell) {
+            cell.style.backgroundColor = 'red'; // Mark hit
+        }
+    } else {
+        // If it's a miss, color the player's grid cell blue
+        const cell = document.querySelector(`#playerBoard [data-row="${row}"][data-col="${col}"]`);
+        if (cell) {
+            cell.style.backgroundColor = 'blue'; // Mark miss
+        }
+    }
 }
