@@ -5,27 +5,31 @@ Outputs:
 Sources: w3schools.com
 Authors: Katie Golder
 Creation date: 9-11-24
--->*/
-body{
+*/
+
+body{ /*Creates the background color and border*/
 background-color: lightblue;
 border: 5px solid rgb(145, 0, 0);
 }
 
-h1{
+h1{/*Defines the font for the header and centers it*/
     font-family: "Copperplate", fantasy, serif;
     text-align: center;
   }
-p{
+
+p{/*Defines the font for paragraphs and centers them */
     font-family: "Couier New", Monospace;
     text-align: center;
 }
-img {
+
+img {/*Defines the images' style to be centered */
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 10%;
   }
-button { /*template from w3schools.com edited for our style*/
+
+button { /*template from w3schools.com for button styling with colors edited for our style*/
     background-color: #005637;
     border: none;
     color: white;
