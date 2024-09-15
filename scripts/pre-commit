@@ -1,3 +1,20 @@
 #!/bin/sh
 
+# Detect platform (Windows or Unix-like)
+case "$(uname -s)" in
+    Darwin|Linux|MINGW*|MSYS*|CYGWIN*)
+        echo "Running pre-commit tooling..."
+        ;;
+    *)
+        echo "Unknown operating system, continuing."
+        ;;
+esac
+
+# Run the Node.js script
 node scripts/update-client-id.js
+
+# Check if the node command was successful
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to run update-client-id.js."
+    exit 1  # Abort the commit if there was an error
+fi
