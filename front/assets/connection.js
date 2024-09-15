@@ -13,12 +13,16 @@ window.api.loadConfig()
         script.onload = () => {
             console.log("Socket.IO script loaded successfully from:", serverAddress);
 
-            window.socket = io(serverAddress);
-
             window.clientId = config.ClientId;
+
+            const new_socket = io(serverAddress);
 
             window.socket.on('getClientId', () => {
                 socket.emit('registerClientId', { ClientId: config.ClientId });
+            });
+
+            window.socket.on('acknowledgeRegistration', ( data ) => {
+                window.socket = new_socket;
             });
         };
 
