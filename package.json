@@ -2,7 +2,7 @@
   "devDependencies": {
   },
   "scripts": {
-    "pre-commit": "scripts/update-client-id.js",
+    "clean": "node ./scripts/update-client-id.js",
     "postinstall": "node ./scripts/create-hook.js"
   }
 }
