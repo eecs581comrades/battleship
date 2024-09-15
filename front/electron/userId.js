@@ -22,6 +22,10 @@ function updateUserId(userId){
     // 2. Parse the JSON data into a JavaScript object
     let jsonData = JSON.parse(data);
 
+    if (process.argv[2] === "second" && jsonData.Build === "Dev"){
+        return;
+    }
+
     // 3. Modify the object (e.g., update the "age" property)
     jsonData.ClientId = userId;
     // 4. Write the updated object back to the JSON file

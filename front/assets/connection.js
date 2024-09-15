@@ -15,6 +15,8 @@ window.api.loadConfig()
 
             window.socket = io(serverAddress);
 
+            window.clientId = config.ClientId;
+
             window.socket.on('getClientId', () => {
                 socket.emit('registerClientId', { ClientId: config.ClientId });
             });

@@ -11,8 +11,8 @@ console.log("Client " + userId + " Initialized");
 
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 1000,
-    height: 800,
+    width: 1920,
+    height: 1080,
     webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: false,
@@ -39,12 +39,25 @@ app.whenReady().then(() => {
 
   ipcMain.handle('load-config', async () => {
     const configPath = path.join(__dirname, '../assets/config.json');
+    const secondaryConfigPath = path.join(__dirname, '../assets/config_dev.json');
     return new Promise((resolve, reject) => {
         fs.readFile(configPath, 'utf8', (err, data) => {
             if (err) {
                 reject(err);
             } else {
-                resolve(JSON.parse(data));
+                const parsedData = JSON.parse(data);
+                if (process.argv[2] === "second" && parsedData.Build === "Dev"){
+                  console.log("Dev Build Secondary Instance Mode");
+                  fs.readFile(secondaryConfigPath, 'utf8', (err, data) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(JSON.parse(data));
+                    }
+                  });
+                } else {
+                  resolve(parsedData);
+                }
             }
         });
     });
