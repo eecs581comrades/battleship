@@ -18,7 +18,7 @@ window.api.loadConfig()
             const new_socket = io(serverAddress);
 
             new_socket.on('getClientId', () => {
-                socket.emit('registerClientId', { ClientId: config.ClientId });
+                new_socket.emit('registerClientId', { ClientId: config.ClientId });
             });
 
             new_socket.on('acknowledgeRegistration', ( data ) => {
