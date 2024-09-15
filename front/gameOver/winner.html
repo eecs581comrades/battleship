@@ -1,23 +1,26 @@
 <!-- winner.html
 Description: The screen the winner sees at the end of game
 Inputs: 
-Outputs: 
-Sources: stackoverflow.com, w3schools.com
+Outputs: Displays a page for the winner
+Sources: stackoverflow.com (for troubleshooting aligning items to center), w3schools.com (for general html elements)
 Authors: Katie Golder
 Creation date: 9-11-24
 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<h1>You won! You sank all your opponent's ships!</h1>
-<link rel="stylesheet" href="styleGameOver.css">
+    <h1>You won! You sank all your opponent's ships!</h1>
+    <link rel="stylesheet" href="styleGameOver.css"> <!--Adds style using css file-->
 </head>
 
 <body>
     <img src="winner.png" alt="Ship Sailing" class="center">
     <p>Good game!</p>
+
+    <!--Play again button-->
     <div style="text-align:center">
     <button onclick="location.href = '../homeScreen/homeScreen.html';" style="width: 200px; ">Play Again</button>
     </div>
+
 </body>
 
