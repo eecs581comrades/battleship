@@ -183,8 +183,6 @@ document.addEventListener("DOMContentLoaded", function () {
         function checkAllShipsPlaced() {
             let count = 5;
             const curShips = Object.keys(playerShips);
-            console.log(curShips);
-            console.log(Object.values(curShips))
             for (let ship in Object.values(curShips)){
                 if (count > numShips && playerShips[curShips[ship]].length != 0){
                     return false;
@@ -267,7 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
             setupControls.style.display = 'none';
             errorFooterArea.style.display = "none";
             let filledships = {};
-            for (let [name, positions] in Object.entries(playerShips)){
+            for (let [name, positions] of Object.entries(playerShips)){
                 if (positions.length != 0){
                     filledships[name] = positions;
                 }
