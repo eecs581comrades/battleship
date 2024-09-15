@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = './front/assets/config.json';
 
+console.log("Test");
+
 // Read the config file
 fs.readFile(path, 'utf8', (err, data) => {
     if (err) {
