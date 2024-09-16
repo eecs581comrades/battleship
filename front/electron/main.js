@@ -9,6 +9,7 @@ const { app, BrowserWindow, ipcMain, contextBridge } = require('electron/main')
 const fs = require('fs');
 const path = require('path');
 const [ checkClientId, updateUserId, generateUniqueId ] = require('./userId')//see userId.js for functions
+const { spawn } = require('child_process');
 
 // Client Setup
 const userId = generateUniqueId()
@@ -44,9 +45,11 @@ app.whenReady().then(() => {
     }
   })
 
+  // Handle a request from a loaded page to fetch the config file via load-config.
   ipcMain.handle('load-config', async () => {
-    const configPath = path.join(__dirname, '../assets/config.json'); //loads config file
-    const secondaryConfigPath = path.join(__dirname, '../assets/config_dev.json'); //if needed, loads dev config
+    const configPath = path.join(__dirname, '../assets/config.json'); //path for loading config file
+    const secondaryConfigPath = path.join(__dirname, '../assets/config_dev.json'); //if needed, path for loading dev config
+    // Read from each config file as needed and return the correct config.
     return new Promise((resolve, reject) => {
         fs.readFile(configPath, 'utf8', (err, data) => {
             if (err) {
@@ -75,4 +78,4 @@ app.on('window-all-closed', () => { //triggers upon client closing
   if (process.platform !== 'darwin') {
     app.quit()
   }
-})
+});

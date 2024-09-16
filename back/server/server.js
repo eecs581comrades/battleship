@@ -188,7 +188,7 @@ io.on('connection', (socket) => {
         socket.emit('setNumberOfShips', { status: 'Success', numShips: round.numberOfShips }); //returns num of ships to client
     });
 
-
+    // Client attempts to register ship placements
     socket.on('registerShipPlacements', (shipData) => {
         const round = playerRoundAssociations[socket.ClientId];
         if (round === undefined){
@@ -201,8 +201,10 @@ io.on('connection', (socket) => {
             return;
         }
 
+        // We check this to make sure players don't try to place ships multiple times
         round.hasPlacedShips[socket.ClientId] = true;
 
+        // place the ships
         for (let shipName in shipData) {
             if (shipData.hasOwnProperty(shipName)) {
                 round.maps[socket.ClientId].addShip(shipName, shipData[shipName]);
@@ -219,15 +221,18 @@ io.on('connection', (socket) => {
         }
     });
 
+    // Handle player attempting to fire a shot
     socket.on('tryHit', (coordinates) => {
         const round = playerRoundAssociations[socket.ClientId];
         const attackingPlayer = socket.ClientId;
         const attackedPlayer = round.players.find(player => player !== socket.ClientId);
+        // Make sure we only register an attempted attack if it is the attacking player's turn.
         if (round.whosTurn === attackingPlayer) {
+            // Attempt to fire a shot and get the result.
             const [ result, reason, sunkShip, hitShipObject ] = round.attemptFire(coordinates.x, coordinates.y, attackedPlayer, attackingPlayer);
             console.log(result, reason, sunkShip);
             if (reason === "InvalidGuess"){
-                return;
+                return; // The player attempted to guess somewhere they have already guessed, or somehow guessed off the board.
             }
             if (result === true){
                 // Hit!
@@ -240,6 +245,7 @@ io.on('connection', (socket) => {
                     });
                 }
 
+                // They won the game!
                 if (reason == "GameWin"){
                     playerSockets[attackingPlayer].emit('youWon', { status: "Success" });
                     playerSockets[attackedPlayer].emit('youLost', { status: "Success" });
@@ -250,6 +256,7 @@ io.on('connection', (socket) => {
                 playerSockets[attackingPlayer].emit('missedTarget', { status: 'Success', coordinates: coordinates });
                 playerSockets[attackedPlayer].emit('theyMissed', { status: 'Success', coordinates: coordinates });
             }
+            // Set the turn to the next player
             round.whosTurn = attackedPlayer;
             round.players.forEach(player => {
                 playerSockets[player].emit('setTurn', { status: 'Success', whosTurn: attackedPlayer });
@@ -257,6 +264,7 @@ io.on('connection', (socket) => {
         }
     });
 
+    // Socket is disconnecting so we can unregister it with all local storage.
     socket.on('disconnect', () => {
         if (socketClientAssociations[socket.id]){
             playerSockets[socketClientAssociations[socket.id]] = undefined;
@@ -266,6 +274,7 @@ io.on('connection', (socket) => {
     });
 });
 
+// Host the express server
 server.listen(port, localNetworkHost, () => {
     console.log(`The BattleShip Server is now active on http://${localNetworkHost}:${port}`)
 });

@@ -1,3 +1,12 @@
+/* update-client-id.js
+Description: A script that resets the client ID value in the config.json file to `null`
+Inputs: None
+Outputs: None
+Sources: None.
+Authors: William Johnson
+Creation date: 9-15-24
+*/
+
 const fs = require('fs');
 const path = './front/assets/config.json';
 

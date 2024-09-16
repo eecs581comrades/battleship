@@ -1,3 +1,11 @@
+/* create-hook.js
+Description: A test program to insert a pre-commit hook to handle clean up. We ended up not using this, but I'm leaving it in as an interesting idea.
+Inputs: None
+Outputs: None
+Sources: git official documentation.
+Authors: William Johnson
+Creation date: 9-15-24
+*/
 const fs = require('fs');
 const path = require('path');
 
