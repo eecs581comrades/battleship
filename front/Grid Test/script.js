@@ -1,7 +1,7 @@
 /*
 Description: Grid creation, placing ships, game logic
 Inputs: 
-Outputs: Handles Game Logic and Game page
+Outputs: Handles Front-End Game Logic and Game page
 Sources: stackoverflow.com (refresh how to using javascript and handling containers)
 Authors: Chase Curtis, William Johnson, Matthew Petillo, Emily Tso
 Creation date: 9-9-24

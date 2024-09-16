@@ -1,3 +1,12 @@
+/* test.js
+Description: A test program that serves a testing web page where sockets.io can be tested easily. This isn't used during run time but is left here as a testing artifact.
+Inputs: None
+Outputs: None
+Sources: node.js and sockets.io official documentation
+Authors: William Johnson
+Creation date: 9-10-24
+*/
+
 const express = require('express');
 const http = require('http');
 const path = require('path');
