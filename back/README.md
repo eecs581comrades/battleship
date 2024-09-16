@@ -1,5 +1,5 @@
 # BattleShip Server
-### Created by William Johnson
+### Created by William Johnson and Matthew Petillo
 
 ## Installation
 The battleship server can be run locally, or hosted via a cloud service. We recommend https://render.com/'s free tier for simplicity.
@@ -23,6 +23,19 @@ If you change the server port, and you want to test locally, you will also need 
 These files currently contain DevServer pointers to localhost:5100 that would need to be updated to match the new server port.
 However, in general, there should be no need to modify the server port.
 
-
 ## Running in Live Mode
-To play using a cloud hosted server, ...
+To play using a cloud hosted server, you'll need to place the backend files on a server. We recommend, again, using render. It appears to be the simpliest way to do so right now. To host on render:
+
+### 0. Sign in your github account. This will allow for direct access to your chosen fork or repo.
+### 1. Create a web service (not a private service) and connect the repo to the service.
+### 2. Choose the main branch to build and deploy.
+### 3. Set "back/server" as the root directory.
+### 4. set "back/server/ $ npm ci" as the build command. Do not set a pre-deploy command.
+### 5. set "node server.js" as the start command. Set autodeploy to yes.
+### 6. Click Manual Deploy in the top-right corner, followed by Deploy Latest Commit. This should take you to the Logs tab, which can also be found on the left hand side.
+
+The server should be started after this. Given the low amount of traffic this game uses, there is no reason to pay or scale the amount of server space. If you need to change the branch or repo for the server, you can do so in the settings tab, found at the left hand side options.
+
+A note on runtime - if you send a request while the server is dormant, it will take about a minute to rebuild and spin back up. The client should update automatically once the server is done doing so. If not, refresh the page. It will become dormant after roughly three hours of no activity.
+
+A reminder: you cannot test locally with two different instances unless you have the dev build running, even with a cloud server.. See the other README.md file, found on the top level of the techstack, for further instructions.
