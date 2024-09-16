@@ -6,9 +6,9 @@ The battleship server can be run locally, or hosted via a cloud service. We reco
 To run a BattlShip Server locally, do the following:
 
 ### 0. Ensure that you have Node.JS installed. It can be found at https://nodejs.org/en. 
-### 1. Go to the top level server, run "npm install" if running for the first time, and then run "npm run play." If running a second instance, run "npm run play second".
-### 4. Monitor. The terminal will now host the server. By default, the server will be hosted on http://localhost:5100.
-### 5. To ensure that the clients use the local server, you will need to update the `battleship/front/assets/config.json` file so that the 'Build' value is set to 'Dev' instead of 'Live'.
+### 1. Go to the top level folder (above this one), and run "npm install" if running for the first time. Then run "npm run server".
+### 2. Monitor. The terminal will now host the server. By default, the server will be hosted on http://localhost:5100.
+### 3. To ensure that the clients use the local server, you will need to update the `battleship/front/assets/config.json` file so that the 'Build' value is set to 'Dev' instead of 'Live'.
 
 ## Configuring your Server Client
 The main script for the server can be found at battleship/back/server/server.js. 
