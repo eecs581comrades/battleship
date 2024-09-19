@@ -16,7 +16,14 @@ const ships = [
     { name: 'Destroyer', length: 1, placed: false }
 ];
 
+const shots = [
+    { name: '1x1 Shot', length: 1, count: -1 },
+    { name: '3x3 Shot', length: 3, count: 3  }
+];
+
 let selectedShip = ships[4]; //default ship
+let selectedShot = shots[0]; //default shot
+let selectedSpecialShot = false; //default mode for the special shot
 let isHorizontal = true; //default orientation
 let placedShips = 0; //number of ships placed
 let isAttackMode = false; //game mode
@@ -57,8 +64,25 @@ document.addEventListener("DOMContentLoaded", function () {
     waitForSocket(() => {
         //handle player shot
         function handlePlayerShot(row, col) {
-            console.log(`Player shot at: Row ${row + 1}, Col ${col + 1}`);
-            window.socket.emit("tryHit", { x: row, y: col });
+            if (selectedSpecialShot && selectedShot.count > 0)
+            {
+                selectedShot.count--;
+                shotNum = 1;
+                for (let x = row-1; x < row+1; x++)
+                {
+                    for (let y = col-1; y < col+1; y++)
+                    {
+                        console.log(`Player shot at: Row ${x + 1}, Col ${y + 1}`);
+                        window.socket.emit("tryHit", { x: x, y: y, isSpecial: true, shotNum: shotNum });
+                        shotNum++;
+                    }
+                }
+            }
+            else
+            {
+                console.log(`Player shot at: Row ${row + 1}, Col ${col + 1}`);
+                window.socket.emit("tryHit", { x: row, y: col, isSpecial: false, shotNum: -1 });
+            }
         }
         //adds the right amount of ship options to ./main.html
         function addShipOptions(){ 
@@ -252,6 +276,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const errorFooterArea = document.getElementById("errorFooter");
         const errorLabel = document.getElementById("errorLabel");
         const statusLabel = document.getElementById("statusLabel");
+        const shotSelect = document.getElementById("shotSelect");
+        
+        shotSelect.addEventListener('change', function() {
+            const shotName = this.value;
+            selectedShot = shots.find(shot => shot.name == shotName);
+            selectedSpecialShot = selectedShot.count != -1;
+        });
 
         // display player's placed ships on the grid
         function displayPlayerShips() {
@@ -303,6 +334,8 @@ document.addEventListener("DOMContentLoaded", function () {
              waitingForPlayers.style.display = 'none';
              turnLabel.textContent = "It's " + (data.firstPlayer === window.clientId ? "your" : "your opponent's") + " turn!";
              turnLabel.style.display = "block";
+
+             shotSelect.style.display = "";
  
              // create grids for both player and opponent
              createGrid(playerBoard, 'player'); // player's
