@@ -62,7 +62,7 @@ const io = socketIo(server, {
 app.use(bodyParser.json());
 
 // Server definition
-const port = 5100;
+const port = 5101;
 const localNetworkHost = '0.0.0.0';
 
 // For setup and original fetching of information
@@ -223,6 +223,8 @@ io.on('connection', (socket) => {
 
     // Handle player attempting to fire a shot
     socket.on('tryHit', (shotData) => {
+        console.log(shotData.x, shotData.y);
+
         const round = playerRoundAssociations[socket.ClientId];
         const attackingPlayer = socket.ClientId;
         const attackedPlayer = round.players.find(player => player !== socket.ClientId);
@@ -258,7 +260,7 @@ io.on('connection', (socket) => {
             }
 
             // Set the turn to the next player
-            if (shotData.shotNum >= 9)
+            if (!shotData.isSpecial || shotData.shotNum >= 9)
             {
                 round.whosTurn = attackedPlayer;
                 round.players.forEach(player => {

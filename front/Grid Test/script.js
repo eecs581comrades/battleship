@@ -17,8 +17,8 @@ const ships = [
 ];
 
 const shots = [
-    { name: '1x1 Shot', length: 1, count: -1 },
-    { name: '3x3 Shot', length: 3, count: 3  }
+    { name: '1x1', length: 1, count: -1 },
+    { name: '3x3', length: 3, count: 3  }
 ];
 
 let selectedShip = ships[4]; //default ship
@@ -50,6 +50,7 @@ const removeShipButton = document.getElementById('removeShip');
 const playerBoard = document.getElementById('playerBoard');
 const opponentBoard = document.getElementById('opponentBoard');
 const gameBoardContainer = document.getElementById('gameBoardContainer');
+const specialShotCounter = document.getElementById("specialShotCounter");
 
 // eventlistener where it ensures content is loaded and executed
 document.addEventListener("DOMContentLoaded", function () {
@@ -68,15 +69,17 @@ document.addEventListener("DOMContentLoaded", function () {
             {
                 selectedShot.count--;
                 shotNum = 1;
-                for (let x = row-1; x < row+1; x++)
+                for (let x = row-1; x < row+2; x++)
                 {
-                    for (let y = col-1; y < col+1; y++)
+                    for (let y = col-1; y < col+2; y++)
                     {
                         console.log(`Player shot at: Row ${x + 1}, Col ${y + 1}`);
                         window.socket.emit("tryHit", { x: x, y: y, isSpecial: true, shotNum: shotNum });
                         shotNum++;
                     }
                 }
+
+                specialShotCounter.textContent = "Special Shots: " + selectedShot.count;
             }
             else
             {
@@ -336,6 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
              turnLabel.style.display = "block";
 
              shotSelect.style.display = "";
+             specialShotCounter.style.display = "";
  
              // create grids for both player and opponent
              createGrid(playerBoard, 'player'); // player's
