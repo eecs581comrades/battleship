@@ -62,7 +62,7 @@ const io = socketIo(server, {
 app.use(bodyParser.json());
 
 // Server definition
-const port = 5101;
+const port = 5100;
 const localNetworkHost = '0.0.0.0';
 
 // For setup and original fetching of information
