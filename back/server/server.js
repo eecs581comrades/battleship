@@ -222,22 +222,24 @@ io.on('connection', (socket) => {
     });
 
     // Handle player attempting to fire a shot
-    socket.on('tryHit', (coordinates) => {
+    socket.on('tryHit', (shotData) => {
+        console.log(shotData.x, shotData.y);
+
         const round = playerRoundAssociations[socket.ClientId];
         const attackingPlayer = socket.ClientId;
         const attackedPlayer = round.players.find(player => player !== socket.ClientId);
         // Make sure we only register an attempted attack if it is the attacking player's turn.
         if (round.whosTurn === attackingPlayer) {
             // Attempt to fire a shot and get the result.
-            const [ result, reason, sunkShip, hitShipObject ] = round.attemptFire(coordinates.x, coordinates.y, attackedPlayer, attackingPlayer);
+            const [ result, reason, sunkShip, hitShipObject ] = round.attemptFire(shotData.x, shotData.y, attackedPlayer, attackingPlayer);
             console.log(result, reason, sunkShip);
             if (reason === "InvalidGuess"){
                 return; // The player attempted to guess somewhere they have already guessed, or somehow guessed off the board.
             }
             if (result === true){
                 // Hit!
-                playerSockets[attackingPlayer].emit('hitTarget', { status: 'Success', coordinates: coordinates });
-                playerSockets[attackedPlayer].emit('gotHit', { status: 'Success', coordinates: coordinates });
+                playerSockets[attackingPlayer].emit('hitTarget', { status: 'Success', coordinates: shotData });
+                playerSockets[attackedPlayer].emit('gotHit', { status: 'Success', coordinates: shotData });
 
                 if (sunkShip){
                     round.players.forEach(player => {
@@ -253,14 +255,18 @@ io.on('connection', (socket) => {
                 }
             } else {
                 // Miss...
-                playerSockets[attackingPlayer].emit('missedTarget', { status: 'Success', coordinates: coordinates });
-                playerSockets[attackedPlayer].emit('theyMissed', { status: 'Success', coordinates: coordinates });
+                playerSockets[attackingPlayer].emit('missedTarget', { status: 'Success', coordinates: shotData });
+                playerSockets[attackedPlayer].emit('theyMissed', { status: 'Success', coordinates: shotData });
             }
+
             // Set the turn to the next player
-            round.whosTurn = attackedPlayer;
-            round.players.forEach(player => {
-                playerSockets[player].emit('setTurn', { status: 'Success', whosTurn: attackedPlayer });
-            });
+            if (!shotData.isSpecial || shotData.shotNum >= 9)
+            {
+                round.whosTurn = attackedPlayer;
+                round.players.forEach(player => {
+                    playerSockets[player].emit('setTurn', { status: 'Success', whosTurn: attackedPlayer });
+                });
+            }
         }
     });
 
