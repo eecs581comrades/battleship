@@ -2,7 +2,7 @@
 Description: Grid creation, placing ships, game logic
 Inputs: 
 Outputs: Handles Front-End Game Logic and Game page
-Sources: stackoverflow.com (refresh how to using javascript and handling containers)
+Sources: stackoverflow.com (refresh how to use javascript and handling containers)
 Authors: Chase Curtis, William Johnson, Matthew Petillo, Emily Tso
 Creation date: 9-9-24
 */
@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     filledships[name] = positions;
                 }
             }
-            window.socket.emit("registerShipPlacements", filledships); //emmit ship placemnets to server
+            window.socket.emit("registerShipPlacements", filledships); //emit ship placements to server
         });
 
 

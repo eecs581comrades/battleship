@@ -5,7 +5,7 @@ Description: The program that initializes and manages the server that facilitate
 Inputs: None
 Outputs: None
 Sources: node.js, sockets.io, and express official documentation
-Authors: William Johnson, MAtthew Petillo
+Authors: William Johnson, Matthew Petillo
 Creation date: 9-10-24
 */
 
@@ -38,6 +38,9 @@ let playerSockets = {};
 let socketClientAssociations = {};
 
 let activeParties = {};
+
+// These are variables and functions that store the necessary structure needed for the server to implement the AI for a single player game.
+
 
 // Function that cleans up global associations for players to allow them to join new rounds/parties. Also cleans up a party.
 function cleanUpRound(players){
@@ -86,6 +89,12 @@ io.on('connection', (socket) => {
     console.log("Client Connected:", socket.id);
 
     socket.emit('getClientId', {});
+
+    // Placeholder for future AI implementation
+    socket.on('initiateSinglePlayer', (numShips) => {
+        // this console log is a placeholder for the future AI implementation
+        console.log('Single Player Game Initiated');
+    });
 
     socket.on('registerClientId', (data) => {
         playerSockets[data.ClientId] = socket;
