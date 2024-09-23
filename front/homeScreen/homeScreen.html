@@ -139,6 +139,7 @@ Creation date: 9-10-24
             buttonsArea.style.display = "block";
 
             const radios = document.getElementsByName('ship_select');//Checks what number of ships the host chose
+            const radios1P = document.getElementsByName('ship_select1P');
 
               function new1PGame() {//Function runs when 1P game button is selected
                 new1PGameArea.style.display = "block";
@@ -166,7 +167,7 @@ Creation date: 9-10-24
                 let numberOfShips = 5; //Default ship value.
 
                 //Loops through the radio buttons to find the checked one
-                for (const radio of radios) {
+                for (const radio of radios1P) {
                   if (radio.checked) {
                     numberOfShips = radio.value; //Stores the value of selected radio button for number of ships
                     break;
