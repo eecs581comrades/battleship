@@ -175,7 +175,7 @@ class BattleshipRound {
      */
     randomTile() {
         let x = Math.trunc(Math.random() * (this.gridDimensions[0] - 1));
-		let y = Math.trunc(Math.random() * (this.gridDimensions[1] - 1));
+        let y = Math.trunc(Math.random() * (this.gridDimensions[1] - 1));
 
         return {x:x, y:y}
     }
