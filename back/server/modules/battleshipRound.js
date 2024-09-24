@@ -159,8 +159,6 @@ class BattleshipRound {
         }
     }
     aiTurn() {
-        // const opPlayer = this.players.find(player => player != AIPlayer)
-        
         const opMap = this.maps[this.host]
         if (this.aiType == EASY) {
             while(1) {
