@@ -7,15 +7,46 @@ Authors: William Johnson
 Creation date: 9-13-24
 */
 
+const AIPlayer = 0
+
+const NO_AI = 0;
+const EASY = 1;
+const MEDIUM = 2;
+const HARD = 3;
+
 //For internal use - creates a map based off a given X, Y format.
 class Map {
+    /**
+     * Coordinate object, used for addShip, isValid
+     * @typedef {Object} Coordinate 
+     * @property {number} x
+     * @property {number} y
+     */
+    /**
+     * @typedef  CellData
+     * @type {object}
+     * @property {?number} shipId
+     * @property {bool} isHit
+     */
+    /**
+     * @typedef Ship
+     * @type {object}
+     * @property {Coordinate[]} Definition
+     * @property {bool} IsSunk
+     */
+
     //takes dimensions in [x, y] format
     constructor(dimensions){
         console.log(dimensions[0]);
+        this.dimensions = dimensions
+        
+        /** @type {Object.<number, Object.<number, CellData>>} */
         this.Map = {};
+        /** @type {Object.<number, Ship>} */
         this.Ships = {};
         //creates an array based map
         for (let i = 0; i < dimensions[0]; i++) {
+            /** @type {Object.<number, CellData>} */
             const row = {};
             for (let j = 0; j < dimensions[1]; j++) {
                 row[j] = { shipId: null, isHit: false };
@@ -23,7 +54,11 @@ class Map {
             this.Map[i] = row;
         }
     }
-    //adds ship part at x, y coordinates
+    
+    /**
+     * @param {int} shipId - number 1-5
+     * @param {Coordinate[]} shipDefinition - array of coordinates, length should be equal to shipId.
+     */
     addShip(shipId, shipDefinition){
         this.Ships[shipId] = {}
         this.Ships[shipId].Definition = shipDefinition;
@@ -36,25 +71,116 @@ class Map {
             this.Map[coordinate.x][coordinate.y] = { shipId: shipId, isHit: false };
         });
     }
+
+    /**
+     * 
+     * @param {Coordinate[]} shipDefinition 
+     * @returns {boolean} returns if the ship placement would be valid.
+     */
+    isValid(shipDefinition){
+        shipDefinition.forEach(coordinate => { //coordinate should be an array, so runs through each
+            if (this.Map[coordinate.x][coordinate.y].shipId == null) {
+              return false;
+            }
+        });
+        return true;
+    }
+    /**
+     * 
+     * @param {number} shipId should be between 1 and 5
+     */
+    addAIShip(shipId) {
+        const horizontal = (Math.random() >= 0.5)
+        while (1) {
+          
+            let x = Math.trunc(Math.random() * (this.dimensions[0]-1));
+            let y = Math.trunc(Math.random() * (this.dimensions[1]-1));
+            
+            /** @type {Coordinate[]} */
+            let coordinates = [];
+            
+            for (let i = 0; i < shipId; i++) {
+                if (horizontal) {
+                    let _x;
+                    if (x + i >= 10) {
+                        _x = x - (x + i - 10) - 1
+                    } else {
+                        _x = x + i
+                    }
+                    coordinates.push({x:_x, y:y})
+                } else {
+                    let _y;
+                    if (y + i >= 10) {
+                        _y = y - (y + i - 10) - 1;
+                    } else {
+                        _y = y + i;
+                    }
+                    coordinates.push({x:x,y:_y});
+                }
+                
+            }
+            if (this.isValid(coordinates)) {
+                this.addShip(shipId, coordinates)
+                return;
+            }
+        }
+    }
 }
+
 //data structure for a battleship round
 class BattleshipRound {
     //takes host clientId, num of ships, grid dimensions for Maps
     constructor(host, numberOfShips, gridDimensions){
         this.host = host;
+        /** @type {number[]} */
         this.players = [];
         this.numberOfShips = numberOfShips;
+        /** @type {Object.<number, Map>} */
         this.maps = {};
         this.guessHistory = {};
         this.gridDimensions = gridDimensions;
         this.whosTurn = null;
         this.hasPlacedShips = {};
+        this.aiType = NO_AI;
     }
     //adds player and attaches a map
     addPlayer(clientId){
         this.players.push(clientId);
         this.maps[clientId] = new Map(this.gridDimensions);
     }
+
+    addAI(difficulty){
+        this.aiType = difficulty
+        this.players.push(AIPlayer)
+        this.maps[AIPlayer] = new Map(this.gridDimensions);
+        for (let i = 0; i < this.numberOfShips; i++) {
+            this.maps[AIPlayer].addAIShip(i+1)
+            console.log("ship " + (i+1) + " added");
+        }
+    }
+    aiTurn() {
+        const opMap = this.maps[this.host]
+        if (this.aiType == EASY) {
+            while(1) {
+                let tile = this.randomTile();
+                if (!opMap.Map[tile.x][tile.y].isHit) {
+                    return tile;
+                    
+                }
+            }
+        }
+    }
+    /**
+     * @returns {Coordinate}
+     */
+    randomTile() {
+        let x = Math.trunc(Math.random() * (this.gridDimensions[0] - 1));
+        let y = Math.trunc(Math.random() * (this.gridDimensions[1] - 1));
+
+        return {x:x, y:y}
+    }
+
+    
     //attempts to fire at a target
     attemptFire(x, y, targetPlayer, sourcePlayer){
         if (this.maps[targetPlayer] == undefined) { //no player
@@ -73,13 +199,17 @@ class BattleshipRound {
 
         const mapSquareData = this.maps[targetPlayer].Map[x][y]; //pulls a specific square from Map data struct
 
-        if (mapSquareData === undefined || mapSquareData.shipId === null || mapSquareData.shipId === undefined){ //checks to see if the space has not been hit and if there is no ship
+        if (mapSquareData === undefined || mapSquareData.isHit) { // if this space has been hit
+            return [false, "InvalidGuess"]
+        }
+
+        if (mapSquareData.shipId === null || mapSquareData.shipId === undefined){ //checks to see if the space has not been hit and if there is no ship
             mapSquareData.isHit = true;
             return [false, "TrueMiss"];
         }
 
         const hitShipObject = this.maps[targetPlayer].Ships[mapSquareData.shipId];
-
+        
         if (hitShipObject === null || hitShipObject.IsSunk || mapSquareData.isHit){ //if bad guess
             return [false, "InvalidGuess"];
         }
@@ -118,4 +248,4 @@ class BattleshipRound {
 
 }
 
-module.exports = [ BattleshipRound ];
+module.exports = [ BattleshipRound, AIPlayer, NO_AI, EASY, MEDIUM, HARD ];
