@@ -110,16 +110,15 @@ class Map {
                     coordinates.push({x:_x, y:y})
                 } else {
                     let _y;
-					if (y + i >= 10) {
-						_y = y - (y + i - 10) - 1;
-					} else {
-						_y = y + i;
-					}
-					coordinates.push({x:x,y:_y});
+                    if (y + i >= 10) {
+                        _y = y - (y + i - 10) - 1;
+                    } else {
+                        _y = y + i;
+                    }
+                    coordinates.push({x:x,y:_y});
                 }
                 
             }
-            console.log(coordinates)
             if (this.isValid(coordinates)) {
                 this.addShip(shipId, coordinates)
                 return;
