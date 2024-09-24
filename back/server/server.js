@@ -92,75 +92,72 @@ io.on('connection', (socket) => {
 
     // Placeholder for future AI implementation
     socket.on('initiateSinglePlayer', (numShips) => {
-		// TODO: ALLOW SPECIFYING DIFFICULTY
-		const AI_TYPE = EASY;
-        console.log(numShips)
-		// this console log is a placeholder for the future AI implementation
-		console.log("Single Player Game Initiated");
+        // TODO: ALLOW SPECIFYING DIFFICULTY
+        const AI_TYPE = EASY;
 
-		if (playerPartyAssociations[socket.ClientId] !== undefined) {
-			socket.emit("createParty", {
-				status: "Rejected",
-				reason: "Target player is already registered in a party",
-			});
-			return;
-		}
-		try {
-			let matchId = generateUniqueId(); //see modules/matchmaking.js
-			while (activeParties[matchId] !== undefined) {
-				//checks for duplicates
-				matchId = generateUniqueId();
-			}
+        if (playerPartyAssociations[socket.ClientId] !== undefined) {
+            socket.emit("createParty", {
+                status: "Rejected",
+                reason: "Target player is already registered in a party",
+            });
+            return;
+        }
+        try {
+            let matchId = generateUniqueId(); //see modules/matchmaking.js
+            while (activeParties[matchId] !== undefined) {
+                //checks for duplicates
+                matchId = generateUniqueId();
+            }
 
-			const newMatch = new Match(socket.ClientId, numShips, matchId);
-			newMatch.players.push(AIPlayer);
-			playerSockets[AIPlayer] = {};
-			playerSockets[AIPlayer].emit = (arg1, arg2) => {console.log("AI emit call: " + arg1 + ": " + JSON.stringify(arg2))};
-			activeParties[matchId] = newMatch; //stores matchid with new match instance
-			playerPartyAssociations[socket.ClientId] = newMatch; // associates client with party
-			socket.emit("createParty", { status: "Success", matchId: matchId });
-			// return;
-		} catch (err) {
-			console.log(err);
-			socket.emit("createParty", { status: "Rejected", reason: err });
-			return;
-		}
+            const newMatch = new Match(socket.ClientId, numShips, matchId);
+            newMatch.players.push(AIPlayer);
+            playerSockets[AIPlayer] = {};
+            playerSockets[AIPlayer].emit = (arg1, arg2) => {console.log("AI emit call: " + arg1 + ": " + JSON.stringify(arg2))};
+            activeParties[matchId] = newMatch; //stores matchid with new match instance
+            playerPartyAssociations[socket.ClientId] = newMatch; // associates client with party
+            socket.emit("createParty", { status: "Success", matchId: matchId });
+            // return;
+        } catch (err) {
+            console.log(err);
+            socket.emit("createParty", { status: "Rejected", reason: err });
+            return;
+        }
 
-		// -- Round Start Logic -- //
-		const party = playerPartyAssociations[socket.ClientId];
+        // -- Round Start Logic -- //
+        const party = playerPartyAssociations[socket.ClientId];
 
-		//creates new round and places all players in that round
-		try {
-			const newRound = new BattleshipRound(
-				socket.ClientId,
-				party.numShips,
-				party.gridDimensions
-			);
+        //creates new round and places all players in that round
+        try {
+            const newRound = new BattleshipRound(
+                socket.ClientId,
+                party.numShips,
+                party.gridDimensions
+            );
 
-			// const randomIndex = Math.floor(
-			// 	Math.random() * party.players.length
-			// );
-			// newRound.whosTurn = party.players[randomIndex];
+            // const randomIndex = Math.floor(
+            //   Math.random() * party.players.length
+            // );
+            // newRound.whosTurn = party.players[randomIndex];
 
-			newRound.whosTurn = party.players[0];
+            newRound.whosTurn = party.players[0];
 
-			newRound.addPlayer(party.players[0]);
-			newRound.addAI(AI_TYPE);
-			newRound.hasPlacedShips[AIPlayer] = true;
-			playerRoundAssociations[party.players[0]] = newRound;
-			socket.emit("startRound", {
-				status: "Success",
-				players: party.players,
-			});
-		} catch (err) {
-			socket.emit("startRound", {
-				status: "Error",
-				reason: err.toString(),
-			});
-			console.log(err);
-			return;
-		}
-	});
+            newRound.addPlayer(party.players[0]);
+            newRound.addAI(AI_TYPE);
+            newRound.hasPlacedShips[AIPlayer] = true;
+            playerRoundAssociations[party.players[0]] = newRound;
+            socket.emit("startRound", {
+                status: "Success",
+                players: party.players,
+            });
+        } catch (err) {
+            socket.emit("startRound", {
+                status: "Error",
+                reason: err.toString(),
+            });
+            console.log(err);
+            return;
+        }
+    });
 
     socket.on('registerClientId', (data) => {
         playerSockets[data.ClientId] = socket;
@@ -352,51 +349,51 @@ io.on('connection', (socket) => {
                 
                 const [ aiResult, aiReason, aiSunkShip, aiHitShipObject ] = round.attemptFire(aiShot.x, aiShot.y, attackingPlayer, attackedPlayer);
                 console.log(aiShot.x, aiShot.y, result, reason, sunkShip);
-				if (aiReason === "InvalidGuess") { // This should never happen...
-					return; 
-				}
-				if (aiResult === true) {
-					// Hit!
-					playerSockets[attackedPlayer].emit("hitTarget", {
-						status: "Success",
-						coordinates: aiShot,
-					});
-					playerSockets[attackingPlayer].emit("gotHit", {
-						status: "Success",
-						coordinates: aiShot,
-					});
+                if (aiReason === "InvalidGuess") { // This should never happen...
+                    return; 
+                }
+                if (aiResult === true) {
+                    // Hit!
+                    playerSockets[attackedPlayer].emit("hitTarget", {
+                        status: "Success",
+                        coordinates: aiShot,
+                    });
+                    playerSockets[attackingPlayer].emit("gotHit", {
+                        status: "Success",
+                        coordinates: aiShot,
+                    });
 
-					if (aiSunkShip) {
-						round.players.forEach((player) => {
-							playerSockets[player].emit("sunkShip", {
-								status: "Success",
-								attackedPlayer: attackingPlayer,
-								shipObject: aiHitShipObject,
-							});
-						});
-					}
+                    if (aiSunkShip) {
+                        round.players.forEach((player) => {
+                            playerSockets[player].emit("sunkShip", {
+                                status: "Success",
+                                attackedPlayer: attackingPlayer,
+                                shipObject: aiHitShipObject,
+                            });
+                        });
+                    }
 
-					// They won the game!
-					if (aiReason == "GameWin") {
-						playerSockets[attackedPlayer].emit("youWon", {
-							status: "Success",
-						});
-						playerSockets[attackingPlayer].emit("youLost", {
-							status: "Success",
-						});
-						cleanUpRound([attackingPlayer, attackedPlayer]);
-					}
-				} else {
-					// Miss...
-					playerSockets[attackedPlayer].emit("missedTarget", {
-						status: "Success",
-						coordinates: aiShot,
-					});
-					playerSockets[attackingPlayer].emit("theyMissed", {
-						status: "Success",
-						coordinates: aiShot,
-					});
-				}
+                    // They won the game!
+                    if (aiReason == "GameWin") {
+                        playerSockets[attackedPlayer].emit("youWon", {
+                            status: "Success",
+                        });
+                        playerSockets[attackingPlayer].emit("youLost", {
+                            status: "Success",
+                        });
+                        cleanUpRound([attackingPlayer, attackedPlayer]);
+                    }
+                } else {
+                    // Miss...
+                    playerSockets[attackedPlayer].emit("missedTarget", {
+                        status: "Success",
+                        coordinates: aiShot,
+                    });
+                    playerSockets[attackingPlayer].emit("theyMissed", {
+                        status: "Success",
+                        coordinates: aiShot,
+                    });
+                }
 
                 round.whosTurn = attackingPlayer;
                 round.players.forEach(player => {
