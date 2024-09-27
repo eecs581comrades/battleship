@@ -11,7 +11,7 @@ This is a JavaScript implementation of the classic board game Battleship. The ga
 - [In Depth Guide](#in-depth-guide)
   - [The Server](#the-server)
   - [The Client](#the-client)
-  - [Online Play](#online-play)
+  - [Cloud Hosting](#cloud-hosting)
   - [Committing Changes](#committing-changes)
 - [End Credits](#end-credits)
   - [Estimated Time Required](#estimated-time-required)
@@ -23,6 +23,7 @@ This is a JavaScript implementation of the classic board game Battleship. The ga
 ---
 
 # Quick Start Guide
+This guide will help you get a local installation of the game up and running quickly. For web hosting, etc., please see the [In Depth Guide](#in-depth-guide) below.
 ## Dependencies
 Before doing anything else, ensure that you have done the following:
 - Install node.js. Node can be installed from https://nodejs.org/en.
@@ -46,9 +47,6 @@ The Server is the backend code that controls game state, match making, and playe
 ### Testing Locally
 To run a local version of the server, open a terminal in this (the top level) folder and run `npm run server`. This will launch a local build of the server at https://localhost:5100. 
 You can check to see if the server is running by visiting that url in any web browser and ensuring a page is displayed that says the server is operational.
-
-For more information on the server, how to modify it, and what it does, please see the [Server README.md](./back/README.md) file.
-The Server README file will also describe how to deploy your own branch of this repository to render.com to mimic our setup.
 
 
 ## The Client
@@ -84,7 +82,7 @@ If desired, it is also possible to manually run either of the clients and or the
 During normal operations, the start.sh script runs these commands in sequence in a single shell window.In most cases there is no reason to run them individually.
 
 
-## Online Play
+## Cloud Hosting
 Version 1.0 was tested on a server instance hosted on render.com. The code should be able to be deployed to any server that supports Node.js and WebSockets. **YMMV**.
 
 Before you run the client, you will need to make some config changes depending on your testing setup:
@@ -95,6 +93,28 @@ CONFIG SCRIPT: [config.json](./front/assets/config.json) | ./front/assets/config
 - Set the "Build" value to "Live"
 - Ensure that the "ClientId" value is set to `null`
 
+### Render Hosting
+To host the server on a cloud service, you'll have to place the backend files on a server. One option which was tested
+with earlier versions of the game is to use render.com. It appears to be the simplest way to do so right now. To host on render:
+- Sign in to render with your github account. This will allow for direct access to your chosen fork or repo.
+- Create a web service (not a private service) and connect the repo to the service.
+- Choose your target branch to build and deploy.
+- Set "back/server" as the root directory.
+- Set "back/server/ $ npm ci" as the build command. Do not set a pre-deploy command.
+- Set "node server.js" as the start command. Set autodeploy to yes.
+- Click Manual Deploy in the top-right corner, followed by Deploy Latest Commit. This should take you to the Logs tab, which can also be found on the left hand side.
+
+A free account is likely sufficient for this project, as the game is not expected to generate a large amount of traffic. If you need to change the branch or repo for the server, you can do so in the settings tab, found at the left hand side options.
+
+- NOTE: If the server is dormant, it will take about a minute to rebuild and spin back up. The client should update automatically once the server is done doing so. If not, refresh the page. It will become dormant after roughly three hours of no activity.
+
+
+### Changing the Server Port:
+If you change the server port, and you want to test locally, you will also need to update the following files:
+- `battleship/front/assets/config.json`
+- `battleship/front/assets/config_dev.json`
+These files currently contain DevServer pointers to localhost:5100 that would need to be updated to match the new server port.
+  However, in general, there should be no need to modify the server port.
 
 ## Committing Changes
 If you have tested locally, the ClientID in the config file will have been modified. To clean that up, we recommend running `npm run clean` before committing changes to your branches.
