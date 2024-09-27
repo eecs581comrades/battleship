@@ -14,6 +14,9 @@ This is a JavaScript implementation of the classic board game Battleship. The ga
   - [Online Play](#online-play)
   - [Committing Changes](#committing-changes)
 - [End Credits](#end-credits)
+  - [Estimated Time Required](#estimated-time-required)
+  - [Actual Time Required](#actual-time-required)
+  - [About the Project](#about-the-project)
 
 [//]: # (---)
 
@@ -99,18 +102,7 @@ If you have tested locally, the ClientID in the config file will have been modif
 ---
 # End Credits
 
-For more information and documentation on electron, the tool that allows us to display html/css/js as a native application, please see the project's official website at https://www.electronjs.org/.
-
-## About the Project
-
-### Languages:
-- Frontend: node.js, css, html, JavaScript
-- Backend: node.js
-### Technologies:
-- Frontend: electron, sockets.io
-- Backend: express, sockets.io
-
-# Estimated Time Required
+## Estimated Time Required
 
 - 5 days x 1 hours/day + 2 days x 2  hours/day = **9 hours per team member total**
 - 9 hours per week x 2 weeks = **18 hours per team member total**
@@ -118,7 +110,7 @@ For more information and documentation on electron, the tool that allows us to d
 - this assumes team members will work 1 hour per day every weekday on average and 2 hours per day on the weekend
 
 
-# Actual Time Required
+## Actual Time Required
 (copied from original team google sheet)
 
 ### Week 1
@@ -141,3 +133,16 @@ For more information and documentation on electron, the tool that allows us to d
 | Jacob      | 0.5                        | 0    | 0    | 0    | 0    | 0    | 0    | 0.5   |
 | Richard    | 0                          | 0    | 1    | 4    | 0    | 0    | 0    | 5     |
 | **Total**  | **Fill in at end of week** |      |      |      |      |      |      |       |
+
+
+
+## About the Project
+
+### Languages:
+- Frontend: node.js, css, html, JavaScript
+- Backend: node.js
+### Technologies:
+- Frontend: electron, sockets.io
+- Backend: express, sockets.io
+
+For more information and documentation on electron, the tool that allows us to display html/css/js as a native application, please see the project's official website at https://www.electronjs.org/.
