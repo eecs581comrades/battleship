@@ -110,9 +110,34 @@ For more information and documentation on electron, the tool that allows us to d
 - Frontend: electron, sockets.io
 - Backend: express, sockets.io
 
-[//]: # (### Roles:)
-[//]: # (- backend: Matthew, Wil)
-[//]: # (- frontend: Katie, Emily, Chase)
-### Requirements:
-- frontend: Can be played either locally or online. need design for 10x10 grid, way to put battleships, pull from backend, send states
-- backend: control state, act as mediary, pass info about strikes
+# Estimated Time Required
+
+- 5 days x 1 hours/day + 2 days x 2  hours/day = **9 hours per team member total**
+- 9 hours per week x 2 weeks = **18 hours per team member total**
+- 5 team members x 18 hours = **90 hours total**
+- this assumes team members will work 1 hour per day every weekday on average and 2 hours per day on the weekend
+
+
+# Actual Time Required
+(copied from original team google sheet)
+
+### Week 1
+| Member    | 9/16   | 9/17    | 9/18  | 9/19  | 9/20    | 9/21  | 9/22    | Total    |
+|-----------|--------|---------|-------|-------|---------|-------|---------|----------|
+| Derek     | 0      | 0       | 0     | 0     | 0       | 0     | 0       | 0        |
+| Ethan     | 0      | 0       | 0     | 1     | 1       | 0     | 0.5     | 2.5      |
+| Mo        | 0      | 0       | 0     | 0.5   | 5       | 0     | 0       | 5.5      |
+| Jacob     | 0      | 0       | 0     | 2     | 0.5     | 0     | 0       | 2.5      |
+| Richard   | 0      | 0.5     | 1     | 0.5   | 0       | 0     | 0       | 2        |
+| **Total** | **0**  | **0.5** | **1** | **4** | **6.5** | **0** | **0.5** | **12.5** |
+
+
+### Week 2
+| Member     | 9/23                       | 9/24 | 9/25 | 9/26 | 9/27 | 9/28 | 9/29 | Total |
+|------------|----------------------------|------|------|------|------|------|------|-------|
+| Derek      | 6                          | 6    | 2    | 0    | 0    | 0    | 0    | 14    |
+| Ethan      | 5                          | 2    | 0    | 0    | 0    | 0    | 0    | 7     |
+| Mo         | 0.5                        | 2.5  | 0    | 0    | 0    | 0    | 0    | 3     |
+| Jacob      | 0.5                        | 0    | 0    | 0    | 0    | 0    | 0    | 0.5   |
+| Richard    | 0                          | 0    | 1    | 4    | 0    | 0    | 0    | 5     |
+| **Total**  | **Fill in at end of week** |      |      |      |      |      |      |       |
