@@ -3,7 +3,7 @@ This is a JavaScript implementation of the classic board game Battleship. The ga
 
 ---
 
----
+[//]: # (---)
 ## Table of Contents
 - [Quick Start Guide](#quick-start-guide)
   - [Dependencies](#dependencies)
@@ -14,7 +14,8 @@ This is a JavaScript implementation of the classic board game Battleship. The ga
   - [Online Play](#online-play)
   - [Committing Changes](#committing-changes)
 - [End Credits](#end-credits)
----
+
+[//]: # (---)
 
 ---
 
@@ -31,7 +32,7 @@ Before doing anything else, ensure that you have done the following:
   - this script will start the server and two clients, allowing you to play a game locally
   - for online play, see the instructions below
 
----
+[//]: # (---)
 
 # In Depth Guide
 Whether hosted locally or remotely, this implementation of battleship comes in two parts: The Server, and the Client.
