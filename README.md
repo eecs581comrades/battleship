@@ -10,11 +10,7 @@ This is a JavaScript implementation of the classic board game Battleship. The ga
   - [Starting the Game](#starting-the-game)
 - [In Depth Guide](#in-depth-guide)
   - [The Server](#the-server)
-    - [Testing Locally](#testing-locally)
   - [The Client](#the-client)
-    - [Testing Against a Remote Server](#testing-against-a-remote-server)
-    - [Testing Against a Local Server](#testing-against-a-local-server)
-    - [Running Individual Scripts](#running-individual-scripts)
   - [Online Play](#online-play)
   - [Committing Changes](#committing-changes)
 - [End Credits](#end-credits)
@@ -43,7 +39,7 @@ Whether hosted locally or remotely, this implementation of battleship comes in t
 ## The Server
 The Server is the backend code that controls game state, match making, and player communications. Code for the Server can be found in the `back` and `back/server` folder. 
 
-#### Testing Locally
+### Testing Locally
 To run a local version of the server, open a terminal in this (the top level) folder and run `npm run server`. This will launch a local build of the server at https://localhost:5100. 
 You can check to see if the server is running by visiting that url in any web browser and ensuring a page is displayed that says the server is operational.
 
@@ -54,7 +50,7 @@ The Server README file will also describe how to deploy your own branch of this 
 ## The Client
 The Client is the frontend code that displays the main menu, game board, and provides an area for the user to interact with. Our frontend visuals are constructed via html and css, and presented using Node.JS and electron.
 
-#### Testing Against a Local Server
+### Testing Against a Local Server
 - Edit the Config Script
 - Ensure that the "DevServerAddress" value is set to "http://127.0.0.1:5100"
 - Set the "Build" value to "Dev"
@@ -75,13 +71,13 @@ The Client is the frontend code that displays the main menu, game board, and pro
 [//]: # (This is necessary because of the way that we track clients. By specifying "second", the client will use a static 'config_dev.json' file instead of 'config.json', so that the ClientIDs will be unique.)
 [//]: # (If you run both clients using npm run play, without specifying second for one, the server will not be able to tell the two clients apart and that will result in match communication failure errors.)
 
-#### Running Individual Scripts
+### Running Individual Scripts
 If desired, it is also possible to manually run either of the clients and or the server locally. This can be done by running the following commands in the terminal:
 - `npm run server` to start the server
 - `npm run play` to start the first client
 - `npm run play second` to start the second client
 
-The start.sh script simply runs these commands in sequence in a single shell window, so in most cases there is no reason to run them individually.
+During normal operations, the start.sh script runs these commands in sequence in a single shell window.In most cases there is no reason to run them individually.
 
 
 ## Online Play
@@ -89,7 +85,7 @@ Version 1.0 was tested on a server instance hosted on render.com. The code shoul
 
 Before you run the client, you will need to make some config changes depending on your testing setup:
 CONFIG SCRIPT: [config.json](./front/assets/config.json) | ./front/assets/config.json
-#### Editing the Config Script
+### Editing the Config Script
 - Set the "LiveServerAddress" value to the address of the server you are testing against
     - e.g. `https://battleship-q6f4.onrender.com`
 - Set the "Build" value to "Live"
