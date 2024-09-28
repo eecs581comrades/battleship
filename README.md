@@ -28,7 +28,7 @@ This guide will help you get a local installation of the game up and running qui
 Before doing anything else, ensure that you have done the following:
 - Install node.js. Node can be installed from https://nodejs.org/en.
 - Open a terminal in this folder (the top level directory) and run `npm install`. This will install some packages and complete required setup steps.
-- Once this step completes successfully, you will be able to build, run, and test the game. 
+- Once this step completes successfully, you will be able to build, run, and test the game.
 
 ## Starting the Game
 - open a terminal and navigate to this folder (the top level directory)
@@ -42,10 +42,10 @@ Before doing anything else, ensure that you have done the following:
 Whether hosted locally or remotely, this implementation of battleship comes in two parts: The Server, and the Client.
 
 ## The Server
-The Server is the backend code that controls game state, match making, and player communications. Code for the Server can be found in the `back` and `back/server` folder. 
+The Server is the backend code that controls game state, match making, and player communications. Code for the Server can be found in the `back` and `back/server` folder.
 
 ### Testing Locally
-To run a local version of the server, open a terminal in this (the top level) folder and run `npm run server`. This will launch a local build of the server at https://localhost:5100. 
+To run a local version of the server, open a terminal in this (the top level) folder and run `npm run server`. This will launch a local build of the server at https://localhost:5100.
 You can check to see if the server is running by visiting that url in any web browser and ensuring a page is displayed that says the server is operational.
 
 
@@ -89,7 +89,7 @@ Before you run the client, you will need to make some config changes depending o
 CONFIG SCRIPT: [config.json](./front/assets/config.json) | ./front/assets/config.json
 ### Editing the Config Script
 - Set the "LiveServerAddress" value to the address of the server you are testing against
-    - e.g. `https://battleship-q6f4.onrender.com`
+  - e.g. `https://battleship-q6f4.onrender.com`
 - Set the "Build" value to "Live"
 - Ensure that the "ClientId" value is set to `null`
 
@@ -113,7 +113,7 @@ A free account is likely sufficient for this project, as the game is not expecte
 If you change the server port, and you want to test locally, you will also need to update the following files:
 - `battleship/front/assets/config.json`
 - `battleship/front/assets/config_dev.json`
-These files currently contain DevServer pointers to localhost:5100 that would need to be updated to match the new server port.
+  These files currently contain DevServer pointers to localhost:5100 that would need to be updated to match the new server port.
   However, in general, there should be no need to modify the server port.
 
 ## Committing Changes
