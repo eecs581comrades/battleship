@@ -8,6 +8,7 @@ This is a JavaScript implementation of the classic board game Battleship. The ga
 - [Quick Start Guide](#quick-start-guide)
   - [Dependencies](#dependencies)
   - [Starting the Game](#starting-the-game)
+  - [Gameplay](#gameplay)
 - [In Depth Guide](#in-depth-guide)
   - [The Server](#the-server)
   - [The Client](#the-client)
@@ -35,6 +36,16 @@ Before doing anything else, ensure that you have done the following:
 - run /scripts/start.sh
   - this script will start the server and two clients, allowing you to play a game locally
   - for online play, see the instructions below
+
+## Gameplay
+- The game is played by two players, each with their own game board.
+  - if single player is selected, the player will play against a computer opponent
+- Players place their ships on their board by clicking on the desired location. The ship rotation may be selected by clicking the rotate button prior to placing the ship.
+- Once all ships are placed, players take turns selecting a location on the opponent's board to fire upon.
+- The standard shot is a single shot, but players may choose to use a spread shot, which fires a 3x3 grid of shots.
+  - Only 3 spread shots are available per game. 
+- The game continues until one player has sunk all of the opponent's ships.
+- The game will display a message when the game is over, and the players may choose to play again or exit the game.
 
 [//]: # (---)
 
